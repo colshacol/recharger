@@ -1,0 +1,29 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #fafbfd !important;
+}
+
+hr {
+  border-color: #dfe1e6;
+  opacity: 0.25;
+}
+
+a,
+:any-link {
+  cursor: pointer;
+}
+
+.prettyScrollBar::-webkit-scrollbar {
+  background: white;
+  width: 20px;
+}
+
+.prettyScrollBar::-webkit-scrollbar-thumb {
+  background: #deebfe;
+  border-radius: 4px;
+}

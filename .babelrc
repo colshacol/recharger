@@ -1,0 +1,4 @@
+{
+  "presets": ["next/babel", "@zeit/next-typescript/babel", "@emotion/babel-preset-css-prop"],
+  "plugins": ["babel-plugin-emotion", "@babel/plugin-proposal-do-expressions"]
+}

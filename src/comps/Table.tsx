@@ -32,8 +32,8 @@ export const Table = (props) => {
   })
 
   React.useEffect(() => {
-    const container = document.querySelector("#tableContainer")
-    const table = document.querySelector("#tableContainer > div")
+    const container = document.querySelector("#tableContainer") as any
+    const table = document.querySelector("#tableContainer > div") as any
 
     table.style.overflowX = "scroll"
     table.classList.add("prettyScrollBar")

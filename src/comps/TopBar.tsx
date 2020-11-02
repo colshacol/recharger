@@ -45,9 +45,7 @@ export const TopBar = (props) => {
         <Grid.Column>
           {!session && (
             <Grid.Row alignItems='center' justifyContent='flex-end' width='100%'>
-              <Button onClick={() => signin("auth0", { callbackUrl: "http://localhost:3000/home" })}>
-                Sign in
-              </Button>
+              <Button onClick={() => signin("auth0")}>Sign in</Button>
             </Grid.Row>
           )}
           {session && (

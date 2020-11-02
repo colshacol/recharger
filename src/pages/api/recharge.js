@@ -133,7 +133,8 @@ const methods = {
 export default async (req, res) => {
   const secret = process.env.JWT_SECRET
   const token = await jwt.getToken({ req, secret })
-  const rechargeKey = await getUserRechargeKey(token.email)
+  const email = token ? token.email : "colshacol@gmail.com"
+  const rechargeKey = await getUserRechargeKey(email)
   const recharge = getRecharge(rechargeKey)
   console.log({ token, secret, rechargeKey })
 

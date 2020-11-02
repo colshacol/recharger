@@ -2,9 +2,13 @@ import DynamicTable from "@atlaskit/dynamic-table"
 import { Layout } from "./Layout"
 import * as Grid from "./Grid"
 import { isPrimitive, isAnyObject, getType, isNull, isUndefined } from "is-what"
-import * as React from "react"
+import { useEffect, FunctionComponent } from "react"
 
-export const Table = (props) => {
+type TableT = FunctionComponent<any> & {
+  Column: FunctionComponent<any>
+}
+
+export const Table: TableT = (props) => {
   const columnConfigs = Array.from(props.children).map((child: any) => {
     const childProps = child.props
     const renderRowCell = childProps.children
@@ -31,7 +35,7 @@ export const Table = (props) => {
     }
   })
 
-  React.useEffect(() => {
+  useEffect(() => {
     const container = document.querySelector("#tableContainer") as any
     const table = document.querySelector("#tableContainer > div") as any
 

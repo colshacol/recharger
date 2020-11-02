@@ -18,12 +18,13 @@ type QueryT = {
 
 // For retrieving existing items in Recharge.
 export const get = async (query: QueryT) => {
+  console.log("fetcher.get", query.dataType, query.method)
   const { method, dataType, ...otherParams } = query
   const params = queryString.stringify(otherParams)
   const storageKey = `${method}:${dataType}_${params}`
   const storageValue = store.get(storageKey)
 
-  if (storageValue) {
+  if (query.dataType && query.method === "listAll" && storageValue) {
     console.log("fetcher.get", "returning storage value for", storageKey)
     return storageValue
   }

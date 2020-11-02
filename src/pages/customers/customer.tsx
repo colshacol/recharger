@@ -1,36 +1,23 @@
-import * as React from "react"
-import { css } from "@emotion/core"
-import Avatar from "@atlaskit/avatar"
-import Button from "@atlaskit/button"
-import EmailIcon from "@atlaskit/icon/glyph/email"
-import PhoneIcon from "@atlaskit/icon/glyph/hipchat/dial-out"
+import { Checkbox } from "@atlaskit/checkbox"
 import Lozenge from "@atlaskit/lozenge"
 import Spinner from "@atlaskit/spinner"
-import { Checkbox } from "@atlaskit/checkbox"
-
-import { Toggle } from "../../comps/Toggle"
-
-import { colors } from "@atlaskit/theme"
 import Textfield from "@atlaskit/textfield"
-
+import { css } from "@emotion/core"
 import dayjs from "dayjs"
 import { useRouter } from "next/router"
+import * as React from "react"
+import { CustomerCard } from "../../comps/CustomerCard"
 import * as Grid from "../../comps/Grid"
 import { Layout } from "../../comps/Layout"
-import { Spacer } from "../../comps/Spacer"
-import { Text } from "../../comps/Text"
-import { useRecharge } from "../../utilities/recharge"
-import * as $recharge from "../../utilities/recharge/utilites"
-import { useImmer } from "use-immer"
-import { useToggle } from "../../utilities/useToggle"
-import { useEffect } from "react"
-import { firstPass } from "../../utilities/firstPass"
-import { useStringifiedObjectSearch } from "../../utilities/useStringifiedObjectSearch"
-import { useCustomer } from "../../utilities/recharge/useCustomer"
 import { ListSection } from "../../comps/ListSection"
 import { SectionMessage } from "../../comps/SectionMessage"
-
-type CustomerPropsT = {}
+import { Spacer } from "../../comps/Spacer"
+import { Text } from "../../comps/Text"
+import { firstPass } from "../../utilities/firstPass"
+import { useCustomer } from "../../utilities/recharge/useCustomer"
+import * as $recharge from "../../utilities/recharge/utilites"
+import { useStringifiedObjectSearch } from "../../utilities/useStringifiedObjectSearch"
+import { useToggle } from "../../utilities/useToggle"
 
 export default function Customer(props) {
   const router = useRouter()
@@ -42,11 +29,12 @@ const checkDiscountMismatch = (subscriptions, addresses, discounts) => {
   const [discountId] = $recharge.getDiscountIds(addresses)
   const [discountCode] = $recharge.getDiscountCodes(discounts, [discountId])
   const productCount = $recharge.countProducts(subscriptions)
-  const expectedCode = productCount < 2 ? undefined : `BOX-OF-${productCount}`
+  const expectedCode = productCount < 2 ? undefined : `BOXOF${productCount}`
+  const altExpected = productCount < 2 ? undefined : `BOX-OF-${productCount}`
 
   return {
     isMismatch: discountCode !== expectedCode,
-    isSimilar: discountCode?.includes(expectedCode),
+    isSimilar: discountCode?.includes(expectedCode) || discountCode?.includes(altExpected),
     expectedCode,
     discountCode,
   }
@@ -74,7 +62,6 @@ const CustomerPage = (props) => {
   ]
 
   React.useEffect(() => {
-    console.log({ isLoadingList })
     if (!isLoadingList.filter(Boolean).length) {
       setTimeout(() => {
         setIsLoading(false)
@@ -87,23 +74,29 @@ const CustomerPage = (props) => {
   const isSimilarMismatch = discountMismatch.isMismatch && discountMismatch.isSimilar
   const isNotMismatch = !discountMismatch.isMismatch
 
+  const fixTotalMismatch = () => {
+    const newCode = discountMismatch.expectedCode
+    const currentCode = discountMismatch.discountCode
+    const addressId = addresses?.[0]?.id
+    console.log({ newCode, addresses, addressId, currentCode })
+    data.fixCode.mutate({ newCode, addressId, currentCode })
+  }
+
+  console.log("fixxxx", data.fixCode)
+
   const totalMismatchActions = [
     {
       key: "fix",
       text: "Fix Now",
-      onClick() {
-        console.log("FIXING")
-      },
+      onClick: fixTotalMismatch,
     },
   ]
 
   const similarMismatchActions = [
     {
-      key: "fix",
-      text: "Fix Now",
-      onClick() {
-        console.log("FIXING")
-      },
+      key: "doIt",
+      text: "Let's Do It",
+      onClick: fixTotalMismatch,
     },
   ]
 
@@ -111,9 +104,9 @@ const CustomerPage = (props) => {
     <SectionMessage title='Discount code mismatch.' appearance='error' actions={totalMismatchActions}>
       <p>
         <span style={{ width: "100%" }}>
-          We expected to see a discount code of {discountMismatch.expectedCode}
+          We expected to see a discount code of "{discountMismatch.expectedCode}""
         </span>
-        <span style={{ width: "100%" }}> but found {discountMismatch.discountCode} instead.</span>
+        <span style={{ width: "100%" }}> but found "{discountMismatch.discountCode}" instead.</span>
       </p>
     </SectionMessage>
   )
@@ -123,8 +116,15 @@ const CustomerPage = (props) => {
       title='Promotional discount code applied.'
       appearance='warning'
       actions={similarMismatchActions}
-      children=''
-    />
+    >
+      {data.fixCode.status === "loading" ? (
+        <Spinner size='small' />
+      ) : (
+        <p>
+          I suggest swapping the "{discountMismatch.discountCode}" code with "{discountMismatch.expectedCode}".
+        </p>
+      )}
+    </SectionMessage>
   )
 
   const noMismatchMessage = data.isReady && isNotMismatch && (
@@ -166,41 +166,37 @@ const SubscriptionsSection = (props) => {
     searchFilter.setValue("")
   }
 
-  const itemsToShow = firstPass([
-    [() => showAllStatuses, searchFilter.filteredItems],
-    [
-      () => !showCanceled.value && showActive.value,
-      () => $recharge.getActiveSubscriptions(searchFilter.filteredItems),
-    ],
-    [
-      () => !showActive.value && showCanceled.value,
-      () => $recharge.getCanceledSubscriptions(searchFilter.filteredItems),
-    ],
-    [() => true, []],
-  ])
+  const filteredItems = searchFilter.filteredItems
+  const cond0 = () => showAllStatuses
+  const result0 = filteredItems
+  const cond1 = !showCanceled.value && showActive.value
+  const result1 = () => $recharge.getActiveSubscriptions(filteredItems)
+  const cond2 = !showActive.value && showCanceled.value
+  const result2 = () => $recharge.getCanceledSubscriptions(filteredItems)
+
+  const itemsToShow =
+    firstPass([
+      [cond0, result0],
+      [cond1, result1],
+      [cond2, result2],
+    ]) || []
 
   const filters = (
     <>
       <Checkbox
-        // value=""
         label='Show Active'
         isChecked={showActive.value}
         onChange={showActive.toggle}
         id='only-show-active-subscriptions'
         name='only-show-active-subscriptions'
-        // testid='only-show-active-subscriptions'
       />
       <Spacer size='24px' />
-
       <Checkbox
-        // value=""
         isChecked={showCanceled.value}
-        // defaultChecked
         label='Show Canceled'
         onChange={showCanceled.toggle}
         id='only-show-canceled-subscriptions'
         name='only-show-canceled-subscriptions'
-        // testid='only-show-canceled-subscriptions'
       />
       <Spacer size='24px' />
       <Grid.Column>
@@ -266,50 +262,11 @@ const AddressesSection = (props) => {
           <Spacer size='8px' />
           <Text is='h5'>{address.zip}</Text>
           <Spacer size='8px' />
-          {/* <Text is='h5'>{address.country}</Text> */}
           <Spacer size='8px' style={{ marginTop: "auto" }} />
           <Text is='p'>Discount:</Text>
           <Text is='h5'>{$recharge.getDiscountCode(discounts, address.discount_id) || "N/A"}</Text>
         </>
       )}
     </ListSection>
-  )
-}
-
-const CustomerCard = ({ customer }) => {
-  return (
-    <Grid.Row alignItems='flex-start'>
-      <Grid.Row width='70%'>
-        <Avatar size='xlarge' />
-        <Spacer size='8px' />
-        <Grid.Column paddingY='8px' alignItems='flex-start'>
-          <Grid.Row alignItems='flex-end'>
-            <Text is='h3'>
-              {customer.first_name} {customer.last_name}
-            </Text>
-            <Spacer size='8px' />
-            <Lozenge appearance='success'>{customer.status}</Lozenge>
-            {/* <Text is='p'>{customer.billing_phone}</Text> */}
-          </Grid.Row>
-          <Spacer size='8px' />
-          <Grid.Column>
-            <Grid.Row>
-              <PhoneIcon label='phone' />
-              <Spacer size='2px' />
-              <Text is='p'>{customer.billing_phone || "N/A"}</Text>
-            </Grid.Row>
-            <Spacer size='2px' />
-            <Grid.Row>
-              <EmailIcon label='email' />
-              <Spacer size='4px' />
-              <Text is='p'>{customer.email || "N/A"}</Text>
-            </Grid.Row>
-          </Grid.Column>
-        </Grid.Column>
-      </Grid.Row>
-      <Grid.Row width='30%' justifyContent='flex-end'>
-        <Button>Save</Button>
-      </Grid.Row>
-    </Grid.Row>
   )
 }

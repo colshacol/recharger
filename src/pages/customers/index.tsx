@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useRecharge } from "../../utilities/recharge"
 import { useStringifiedObjectSearch } from "../../utilities/useStringifiedObjectSearch"
 import TextField from "@atlaskit/textfield"
+import dayjs from "dayjs"
 
 export default function Customers() {
   const customers = useRecharge({
@@ -43,11 +44,17 @@ export default function Customers() {
         <Table.Column dataKey='email' label='Email Address' width='200px'>
           {(value) => value}
         </Table.Column>
+        <Table.Column dataKey='status' label='Status' width='100px'>
+          {(value) => value}
+        </Table.Column>
         <Table.Column dataKey='first_name' label='First Name' width='120px'>
           {(value) => value}
         </Table.Column>
         <Table.Column dataKey='last_name' label='Last Name' width='130px'>
           {(value) => value}
+        </Table.Column>
+        <Table.Column dataKey='created_at' label='Created Date' width='100px'>
+          {(value) => dayjs(value).format("MM/DD/YYYY")}
         </Table.Column>
         <Table.Column dataKey='billing_address1' label='Billing Address' width='200px'>
           {(value) => value}
@@ -65,9 +72,6 @@ export default function Customers() {
           {(value) => value}
         </Table.Column>
         <Table.Column dataKey='billing_phone' label='Billing Phone' width='150px'>
-          {(value) => value}
-        </Table.Column>
-        <Table.Column dataKey='status' label='Status' width='100px'>
           {(value) => value}
         </Table.Column>
       </Table>

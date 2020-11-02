@@ -1,6 +1,14 @@
-import { useRecharge } from "./"
+import { queryCache } from "../reactQuery"
+import { useRecharge, useRechargeMutation } from "./"
 
 export function useCustomer(id, options = {}) {
+  const invalidateKeys = [
+    `customer-${id}`,
+    `customer-${id}-addresses`,
+    `customer-${id}-subscriptions`,
+    `all-discounts`,
+  ]
+
   const customer = useRecharge({
     key: `customer-${id}`,
     dataType: "customer",
@@ -28,11 +36,25 @@ export function useCustomer(id, options = {}) {
     method: "listAll",
   })
 
+  const replaceCode = useRechargeMutation({
+    method: "replaceCode",
+  })
+
+  const fixCode = {
+    status: replaceCode[1].status,
+    data: replaceCode[1].data,
+    error: replaceCode[1].error,
+    mutate: async (args) => {
+      const data = await replaceCode[0](args)
+      invalidateKeys.map((key) => queryCache.invalidateQueries(key))
+    },
+  }
+
   const isReady =
     subscriptions.status === "success" &&
     discounts.status === "success" &&
     customer.status === "success" &&
     addresses.status === "success"
 
-  return { subscriptions, discounts, customer, addresses, isReady }
+  return { fixCode, subscriptions, discounts, customer, addresses, isReady }
 }

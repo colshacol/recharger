@@ -7,7 +7,7 @@ const { MONGO_URL } = process.env
 
 const options = {
   debug: true,
-  database: MONGO_URL,
+  // database: MONGO_URL,
   events: {},
 
   pages: {

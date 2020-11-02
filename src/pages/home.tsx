@@ -24,7 +24,7 @@ export default function Home() {
   const mismatchDiscountCustomerIds = diagnostics.data?.mismatchDiscountCodes
 
   const showInactiveMismatches = useToggle(false)
-  const showInactiveMultiAddress = useToggle(false)
+  const showInactiveRMultiAddress = useToggle(false)
 
   return (
     <Layout title='Home'>
@@ -154,9 +154,9 @@ const UserIndicatorRow = (props) => {
 }
 
 const MismatchFixer = (props) => {
-  const address = props.customer.addresses[0]
-  const newCode = address?.discounts?.[0].suggestedCode
-  const currentCode = address?.discounts?.[0].code
+  const address = props.customer.addresses?.[0]
+  const newCode = address?.discounts?.[0]?.suggestedCode
+  const currentCode = address?.discounts?.[0]?.code
   const addressId = address.id
   console.log(props.customer.addresses)
 

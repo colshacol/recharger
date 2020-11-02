@@ -19,11 +19,16 @@ async function getPage([api, query = {}], index) {
   return api.list({ limit: 250, page, ...query })
 }
 
+async function count(req, res, query, recharge) {
+  const { dataType } = req.query
+  const count = await recharge[dataType].count()
+  res.json(count)
+}
+
 async function listAll(req, res, query, recharge) {
   const { dataType } = req.query
   const count = await recharge[dataType].count()
   const pageCount = Math.ceil(count / 250)
-  console.log({ dataType, count, pageCount })
   const iterable = Array(pageCount).fill([recharge[dataType]])
   const promises = iterable.map(getPage)
   const pages = await Promise.all(promises)
@@ -41,15 +46,14 @@ async function get(req, res, query, recharge) {
 
 async function list(req, res, query, recharge) {
   const { dataType, arg, ...params } = query
-  console.log("LIST", { dataType, arg, params })
   const args = arg ? [arg, params] : [params]
   const data = await recharge[dataType].list(...args)
-
   res.json(data)
 }
 
 const methods = {
   listAll,
+  count,
   list,
   get,
 }
@@ -61,21 +65,10 @@ const getRecharge = (apiKey) => {
   })
 }
 
-const getUserRechargeKey = (emailAddress) => {
-  return new Promise((resolve, reject) => {
-    users.findOne({ emailAddress }, (err, doc) => {
-      console.log({ doc })
-      err && console.log({ err })
-      err && reject(err)
-      return resolve(doc.rechargeApiKey)
-    })
-  })
-}
-
 export default async (req, res) => {
   const secret = process.env.JWT_SECRET
-  const { email } = await jwt.getToken({ req, secret })
-  const rechargeKey = await getUserRechargeKey(email)
+  const token = await jwt.getToken({ req, secret })
+  const rechargeKey = await getUserRechargeKey(token.email)
   console.log({ email, rechargeKey })
   const recharge = getRecharge(rechargeKey)
 

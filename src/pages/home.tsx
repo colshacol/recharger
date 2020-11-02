@@ -24,7 +24,7 @@ export default function Home() {
   const mismatchDiscountCustomerIds = diagnostics.data?.mismatchDiscountCodes
 
   const showInactiveMismatches = useToggle(false)
-  const showInactiveRMultiAddress = useToggle(false)
+  const showInactiveMultiAddress = useToggle(false)
 
   return (
     <Layout title='Home'>

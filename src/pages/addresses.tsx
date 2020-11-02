@@ -9,7 +9,7 @@ export default function Addresses() {
   const addresses = useRecharge({
     dataType: "address",
     method: "listAll",
-  })
+  }) as any
 
   const searchFilter = useStringifiedObjectSearch(addresses.data)
   console.log(addresses, searchFilter)

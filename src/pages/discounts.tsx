@@ -19,7 +19,7 @@ export default function Discounts() {
   const discounts = useRecharge({
     dataType: "discount",
     method: "listAll",
-  })
+  }) as any
 
   const searchFilter = useStringifiedObjectSearch(discounts.data)
   console.log(discounts, searchFilter)

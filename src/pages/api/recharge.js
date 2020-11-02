@@ -16,8 +16,7 @@ const getRecharge = (apiKey) => {
 const getUserRechargeKey = (emailAddress) => {
   return new Promise((resolve, reject) => {
     users.findOne({ emailAddress }, (err, doc) => {
-      console.log({ doc })
-      err && console.log({ err })
+      err && console.log("mongo err", { err })
       err && reject(err)
       return resolve(doc.rechargeApiKey)
     })
@@ -136,6 +135,7 @@ export default async (req, res) => {
   const token = await jwt.getToken({ req, secret })
   const rechargeKey = await getUserRechargeKey(token.email)
   const recharge = getRecharge(rechargeKey)
+  console.log({ token, secret, rechargeKey })
 
   const { method, ...query } = req.query
   return methods[method](req, res, query, recharge)

@@ -6,6 +6,7 @@ import { useRef } from "react"
 import { Breadcrumbs, useCrumb } from "./Breadcrumbs"
 import { Column, Container, Row } from "./Grid"
 import { Spacer } from "./Spacer"
+import { TopBar } from "./TopBar"
 
 type PropsT = {
   title: string
@@ -24,7 +25,7 @@ function LayoutHeader(props: LayoutHeaderPropsT) {
   const breadcrumbs = <Breadcrumbs />
 
   return (
-    <Container wideChild>
+    <Container data-widechild>
       <PageHeader breadcrumbs={breadcrumbs} actions={props.actions} bottomBar={props.bottomBar}>
         {props.title}
       </PageHeader>
@@ -43,6 +44,7 @@ export const Layout: React.FunctionComponent<PropsT> = (props) => {
 
   return (
     <Column width='100%'>
+      <TopBar />
       <LayoutNavigation />
       <Page data-cid='Layout'>
         <LayoutHeader {...props} />
@@ -72,7 +74,7 @@ const LayoutNavigation: React.FunctionComponent<LayoutNavigationPropsT> = (props
   return (
     <Row css={{ background: colors.B400, height: 48, display: "flex", alignItems: "center" }}>
       <Container>
-        <LayoutNavigationLink href='/' text='Home' />
+        <LayoutNavigationLink href='/home' text='Home' />
         <LayoutNavigationLink href='/discounts' text='Discounts' />
         <LayoutNavigationLink href='/subscriptions' text='Subscriptions' />
         <LayoutNavigationLink href='/addresses' text='Addresses' />

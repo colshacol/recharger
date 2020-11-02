@@ -27,3 +27,7 @@ a,
   background: #deebfe;
   border-radius: 4px;
 }
+
+[data-widechild="true"] > :first-child {
+  width: 100%;
+}

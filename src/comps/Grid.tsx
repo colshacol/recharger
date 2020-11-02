@@ -1,37 +1,38 @@
 import styled from "@emotion/styled"
-import Box from "ui-box"
+import UIBox from "ui-box"
 
-export const Row = styled(Box)`
+export const Box = styled(UIBox)`
+  display: inline-flex;
+`
+
+export const Row = styled(UIBox)`
   display: ${(props: GridPropsT) => (props.inline ? "inline-flex" : "flex")};
   width: ${(props: GridPropsT) => props.width || "100%"};
   overflow-x: ${(props: GridPropsT) => (props.scrollX ? "scroll" : "initial")};
 `
 
-export const Column = styled(Box)`
+export const Column = styled(UIBox)`
   display: flex;
   flex-direction: column;
   width: ${(props: GridPropsT) => props.width || (props.fullWidth && "100%") || "auto"};
   overflow-x: ${(props: GridPropsT) => (props.scrollX ? "scroll" : "initial")};
 `
 
-export const Container = styled(Box)`
+export const Container = styled(UIBox)`
   display: flex;
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
   flex-wrap: wrap;
-  padding: 0 24px;
+  padding: 0 48px;
   overflow-x: ${(props: GridPropsT) => (props.scrollX ? "scroll" : "initial")};
-
-  & > :first-child {
-    width: ${(props) => (props.wideChild ? "100%" : "")};
-  }
 `
 
 export const Grid = {
   Row,
   Column,
   Container,
+  Box,
 }
 
 Row.defaultProps = {
@@ -52,5 +53,4 @@ type GridPropsT = {
   fullWidth?: boolean
   width?: string
   inline?: boolean
-  wideChild?: boolean
 }

@@ -4,9 +4,10 @@ import isEmpty from "is-empty"
 import queryString from "query-string"
 import store from "store"
 import { wretch } from "../wretch"
+import cookies from "js-cookie"
 
 const BASE_URL = `/api/recharge`
-const rechargeApi = wretch(BASE_URL)
+const rechargeApi = () => wretch(BASE_URL).auth(`Bearer ${cookies.get("next-auth.session-token")}`)
 
 type QueryT = {
   method: string
@@ -15,17 +16,8 @@ type QueryT = {
   [key: string]: any
 }
 
-const isListAll = (query) => {
-  const { dataType, method, ...others } = query
-  const isOthersEmpty = isEmpty(others)
-  const isListAll = method === "listAll"
-  return isListAll && isOthersEmpty
-}
-
 // For retrieving existing items in Recharge.
 export const get = async (query: QueryT) => {
-  console.log("get", query.dataType, query)
-
   const { method, dataType, ...otherParams } = query
   const params = queryString.stringify(otherParams)
   const storageKey = `${method}:${dataType}_${params}`
@@ -46,7 +38,8 @@ export const get = async (query: QueryT) => {
     return json
   }
 
-  return rechargeApi.query(query).get().fetchError(onFetchError).json().then(handleSuccess)
+  console.log("cookies", `Bearer ${cookies.get("next-auth.session-token")}`)
+  return rechargeApi().query(query).get().fetchError(onFetchError).json().then(handleSuccess)
 }
 
 // For creating new items in Recharge.
@@ -58,10 +51,12 @@ export const post = async (query: QueryT) => {
     return error
   }
 
-  return rechargeApi.query(query).get().fetchError(onFetchError).json()
+  return rechargeApi().query(query).get().fetchError(onFetchError).json()
 }
 
 export const fetcher = {
   get,
   post,
 }
+
+// next-auth.csrf-token=c453f32fe65993b512f9fb5630f96df68397555d1164ec5cc4ac643250d9ac68%7Cf62ba358787616f72d8bd10f5b7592b15e20b4d29dde617cc77f9f4310ba3234; next-auth.callback-url=http%3A%2F%2Flocalhost%3A3000%2Fhome; next-auth.session-token=eyJhbGciOiJIUzUxMiJ9.eyJuYW1lIjoiY29sc2hhY29sIiwiZW1haWwiOiJjb2xzaGFjb2xAZ21haWwuY29tIiwicGljdHVyZSI6Imh0dHBzOi8vcy5ncmF2YXRhci5jb20vYXZhdGFyLzIxNzgzN2RiMzkxNDBkMDU2YzE0ZmMzOWIyZTI0NjM0P3M9NDgwJnI9cGcmZD1odHRwcyUzQSUyRiUyRmNkbi5hdXRoMC5jb20lMkZhdmF0YXJzJTJGY28ucG5nIiwiaWF0IjoxNjA0MjgwMjQwLCJleHAiOjE2MDY4NzIyNDB9.QjQ7KxN7uAg6LeRENAJT1j0-ejAFUXUSKnBGdhC5k6TJOMgLqScnG5Oi4rp1HTkmIX_5EzfSBJ2YhtYUYHtTMw

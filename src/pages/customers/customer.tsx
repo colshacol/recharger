@@ -268,7 +268,8 @@ const AddressesSection = (props) => {
           <Spacer size='8px' />
           {/* <Text is='h5'>{address.country}</Text> */}
           <Spacer size='8px' style={{ marginTop: "auto" }} />
-          <Text is='h5'>Discount: {$recharge.getDiscountCode(discounts, address.discount_id) || "N/A"}</Text>
+          <Text is='p'>Discount:</Text>
+          <Text is='h5'>{$recharge.getDiscountCode(discounts, address.discount_id) || "N/A"}</Text>
         </>
       )}
     </ListSection>

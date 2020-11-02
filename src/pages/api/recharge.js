@@ -1,10 +1,12 @@
+import { parseCookies, setCookie, destroyCookie } from "nookies"
 import Recharge from "recharge-api-node"
 import isEmpty from "is-empty"
+import mongojs from "mongojs"
+import jwt from "next-auth/jwt"
 
-const recharge = new Recharge({
-  apiKey: process.env.RECHARGE_API_KEY,
-  secrete: "pnf-recharge-nextjs",
-})
+const { MONGO_URL } = process.env
+export const mongo = mongojs(MONGO_URL)
+const users = mongo.collection("users")
 
 function countItems(pages) {
   return pages.reduce((final, list) => {
@@ -17,7 +19,7 @@ async function getPage([api, query = {}], index) {
   return api.list({ limit: 250, page, ...query })
 }
 
-async function listAll(req, res) {
+async function listAll(req, res, query, recharge) {
   const { dataType } = req.query
   const count = await recharge[dataType].count()
   const pageCount = Math.ceil(count / 250)
@@ -30,14 +32,14 @@ async function listAll(req, res) {
   res.json(items)
 }
 
-async function get(req, res, query) {
+async function get(req, res, query, recharge) {
   const { dataType, arg, ...params } = query
   console.log("GET", { dataType, arg, params })
   const data = await recharge[dataType].get(arg, params)
   return res.json(data)
 }
 
-async function list(req, res, query) {
+async function list(req, res, query, recharge) {
   const { dataType, arg, ...params } = query
   console.log("LIST", { dataType, arg, params })
   const args = arg ? [arg, params] : [params]
@@ -52,7 +54,31 @@ const methods = {
   get,
 }
 
+const getRecharge = (apiKey) => {
+  return new Recharge({
+    apiKey: apiKey,
+    secrete: "pnf-recharge-nextjs",
+  })
+}
+
+const getUserRechargeKey = (emailAddress) => {
+  return new Promise((resolve, reject) => {
+    users.findOne({ emailAddress }, (err, doc) => {
+      console.log({ doc })
+      err && console.log({ err })
+      err && reject(err)
+      return resolve(doc.rechargeApiKey)
+    })
+  })
+}
+
 export default async (req, res) => {
+  const secret = process.env.JWT_SECRET
+  const { email } = await jwt.getToken({ req, secret })
+  const rechargeKey = await getUserRechargeKey(email)
+  console.log({ email, rechargeKey })
+  const recharge = getRecharge(rechargeKey)
+
   const { method, ...query } = req.query
-  return methods[method](req, res, query)
+  return methods[method](req, res, query, recharge)
 }

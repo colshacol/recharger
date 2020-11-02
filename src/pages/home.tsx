@@ -5,12 +5,10 @@ import { Breadcrumbs, useCrumb } from "../comps/Breadcrumbs"
 import { Layout } from "../comps/Layout"
 import * as Grid from "../comps/Grid"
 import { MenuGroup, Section, ButtonItem } from "@atlaskit/menu"
-import { TopBar } from "../comps/TopBar"
 
-export default function Index() {
+export default function Home() {
   return (
-    <Grid.Column width='100%' height='100vh'>
-      <TopBar />
+    <Layout title='Home'>
       <Grid.Container>
         <Grid.Row>
           <Grid.Column>
@@ -21,15 +19,6 @@ export default function Index() {
           </Grid.Column>
         </Grid.Row>
       </Grid.Container>
-    </Grid.Column>
+    </Layout>
   )
 }
-
-/* <MenuGroup>
-  <Section title='Starred'>
-    <ButtonItem>Navigation System</ButtonItem>
-  </Section>
-  <Section hasSeparator>
-    <ButtonItem>Create project</ButtonItem>
-  </Section>
-</MenuGroup> */

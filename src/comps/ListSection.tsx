@@ -5,6 +5,7 @@ import { Spinner } from "./Atlaskit"
 import { Spacer } from "./Spacer"
 import { Text } from "./Text"
 import { Grid } from "./Grid"
+import { css } from "@emotion/core"
 
 export const ListSection = (props) => {
   const loadingBody = (
@@ -31,16 +32,12 @@ export const ListSection = (props) => {
   )
 
   const subTitle = props.subTitle && (
-    <Grid.Row justifyContent='flex-start' alignItems='center' width='100%'>
+    <div css={subtitleCss}>
       <Text is='h4'>{props.subTitle}</Text>
-    </Grid.Row>
+    </div>
   )
 
-  const filters = props.filters && (
-    <Grid.Row justifyContent='flex-end' width='100%'>
-      {props.filters}
-    </Grid.Row>
-  )
+  const filters = props.filters && <div css={filtersCss}>{props.filters}</div>
 
   const filtersRow = (
     <Grid.Row justifyContent='space-between' flexWrap='nowrap' width='100%'>
@@ -78,3 +75,14 @@ export const ListSection = (props) => {
     </Grid.Container>
   )
 }
+
+const subtitleCss = css`
+  display: flex;
+  align-items: center;
+`
+
+const filtersCss = css`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+`

@@ -27,7 +27,7 @@ type BreadcrumbPropsT = CrumbT & {
 type BreadcrumbSpacerPropsT = BreadcrumbPropsT
 
 const INITIAL_CRUMBS: CrumbT[] = [
-  { text: "Home", routeTo: "/", uid: nanoid() },
+  { text: "Home", routeTo: "/home", uid: nanoid() },
   // { text: "/ Fuck It", routeTo: "/fuckit", uid: nanoid() },
 ]
 

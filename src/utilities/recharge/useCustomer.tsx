@@ -31,7 +31,7 @@ export function useCustomer(id, options = {}) {
   })
 
   const discounts = useRecharge({
-    key: `all-discounts`,
+    key: `allDiscounts`,
     dataType: "discount",
     method: "listAll",
   })

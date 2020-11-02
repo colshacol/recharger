@@ -5,13 +5,10 @@ import { useRecharge } from "../../utilities/recharge"
 import { useStringifiedObjectSearch } from "../../utilities/useStringifiedObjectSearch"
 import TextField from "@atlaskit/textfield"
 import dayjs from "dayjs"
+import { useAllCustomers } from "../../utilities/recharge/hooks"
 
 export default function Customers() {
-  const customers = useRecharge({
-    dataType: "customer",
-    method: "listAll",
-  }) as any
-
+  const customers = useAllCustomers() as any
   const searchFilter = useStringifiedObjectSearch(customers.data)
 
   const barContent = (

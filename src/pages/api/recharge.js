@@ -38,7 +38,7 @@ async function getPage([api, query = {}], index) {
 async function count(req, res, query, recharge) {
   const { dataType } = req.query
   const count = await recharge[dataType].count()
-  res.json(count)
+  return res.json(count)
 }
 
 async function listAll(req, res, query, recharge) {
@@ -48,9 +48,9 @@ async function listAll(req, res, query, recharge) {
   const iterable = Array(pageCount).fill([recharge[dataType]])
   const promises = iterable.map(getPage)
   const pages = await Promise.all(promises)
-  const finalCount = countItems(pages)
   const items = pages.flat()
-  res.json(items)
+  console.log(dataType, items.length)
+  return res.json(items)
 }
 
 async function get(req, res, query, recharge) {
@@ -64,15 +64,17 @@ async function list(req, res, query, recharge) {
   const { dataType, arg, ...params } = query
   const args = arg ? [arg, params] : [params]
   const data = await recharge[dataType].list(...args)
-  res.json(data)
+  return res.json(data)
 }
 
 const replaceCode = async (req, res, query, recharge) => {
   const { addressId, newCode, currentCode } = query
   const existingCode = currentCode === "undefined" ? undefined : currentCode
-  console.log({ addressId, newCode, currentCode, existingCode })
+  const needsReplaced = addressId && newCode && existingCode
+  const needsAdded = addressId && newCode && !existingCode
+  console.log({ addressId, newCode, currentCode, existingCode, needsAdded, needsReplaced })
 
-  if (addressId && newCode && existingCode) {
+  if (needsReplaced) {
     try {
       const result0 = await recharge.address.removeDiscount(addressId)
       console.log({ result0 })
@@ -85,7 +87,7 @@ const replaceCode = async (req, res, query, recharge) => {
     }
   }
 
-  if (addressId && newCode && !existingCode) {
+  if (needsAdded) {
     try {
       const result1 = await recharge.discount.addToAddress(addressId, { discount_code: newCode })
       console.log({ result1 })
@@ -96,11 +98,33 @@ const replaceCode = async (req, res, query, recharge) => {
     }
   }
 
-  res.json({ addressId, newCode, message: "missing value" })
+  return res.json({ addressId, newCode, message: "missing value" })
+}
+
+const mockRes = {
+  json: (data) => data,
+}
+
+const mockReq = (dataType) => {
+  return { query: { dataType } }
+}
+
+const diagnostics = async (req, res, query, recharge) => {
+  console.log("DIAGNOSTICS")
+  const lister = (dataType) => listAll(mockReq(dataType), mockRes, query, recharge)
+  const _subscriptions = lister("subscription")
+  const _customers = lister("customer")
+  const _discounts = lister("discount")
+  const _addresses = lister("address")
+  const list = await Promise.all([_subscriptions, _customers, _discounts, _addresses])
+  const [subscriptions, customers, discounts, addresses] = list
+  console.log(subscriptions.length, customers.length, discounts.length, addresses.length)
+  res.json({ subscriptions, customers, discounts, addresses })
 }
 
 const methods = {
   replaceCode,
+  diagnostics,
   listAll,
   count,
   list,

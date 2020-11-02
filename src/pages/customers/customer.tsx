@@ -7,12 +7,14 @@ import dayjs from "dayjs"
 import { useRouter } from "next/router"
 import * as React from "react"
 import { CustomerCard } from "../../comps/CustomerCard"
+import { useDiagnostics } from "../../comps/DiagnosticsWrapper"
 import * as Grid from "../../comps/Grid"
 import { Layout } from "../../comps/Layout"
 import { ListSection } from "../../comps/ListSection"
 import { SectionMessage } from "../../comps/SectionMessage"
 import { Spacer } from "../../comps/Spacer"
 import { Text } from "../../comps/Text"
+import { getDiscountMismatch } from "../../utilities/checkDiscountMismatch"
 import { firstPass } from "../../utilities/firstPass"
 import { useCustomer } from "../../utilities/recharge/useCustomer"
 import * as $recharge from "../../utilities/recharge/utilites"
@@ -25,21 +27,6 @@ export default function Customer(props) {
   return id ? <CustomerPage id={id} path={router.asPath} /> : <Spinner size='xlarge' />
 }
 
-const checkDiscountMismatch = (subscriptions, addresses, discounts) => {
-  const [discountId] = $recharge.getDiscountIds(addresses)
-  const [discountCode] = $recharge.getDiscountCodes(discounts, [discountId])
-  const productCount = $recharge.countProducts(subscriptions)
-  const expectedCode = productCount < 2 ? undefined : `BOXOF${productCount}`
-  const altExpected = productCount < 2 ? undefined : `BOX-OF-${productCount}`
-
-  return {
-    isMismatch: discountCode !== expectedCode,
-    isSimilar: discountCode?.includes(expectedCode) || discountCode?.includes(altExpected),
-    expectedCode,
-    discountCode,
-  }
-}
-
 const sectionMessageContainerCss = css`
   > section {
     width: 100%;
@@ -48,6 +35,8 @@ const sectionMessageContainerCss = css`
 
 const CustomerPage = (props) => {
   const data = useCustomer(props.id)
+  // const customerData = useDiagnostics(props.id)
+
   const customer = data.customer.data || {}
   const subscriptions = data.subscriptions.data || []
   const addresses = data.addresses.data || []
@@ -69,7 +58,7 @@ const CustomerPage = (props) => {
     }
   }, isLoadingList)
 
-  const discountMismatch = checkDiscountMismatch(subscriptions, addresses, discounts)
+  const discountMismatch = getDiscountMismatch(subscriptions, addresses, discounts)
   const isTotalMismatch = discountMismatch.isMismatch && !discountMismatch.isSimilar
   const isSimilarMismatch = discountMismatch.isMismatch && discountMismatch.isSimilar
   const isNotMismatch = !discountMismatch.isMismatch

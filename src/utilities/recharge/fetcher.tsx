@@ -11,7 +11,7 @@ const rechargeApi = () => wretch(BASE_URL).auth(`Bearer ${cookies.get("next-auth
 
 type QueryT = {
   method: string
-  dataType: string
+  dataType?: string
   key?: string
   [key: string]: any
 }
@@ -39,7 +39,6 @@ export const get = async (query: QueryT) => {
     return json
   }
 
-  console.log("cookies", `Bearer ${cookies.get("next-auth.session-token")}`)
   return rechargeApi().query(query).get().fetchError(onFetchError).json().then(handleSuccess)
 }
 

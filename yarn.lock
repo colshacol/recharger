@@ -1490,7 +1490,7 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.10.0", "@babel/runtime@^7.12.1", "@babel/runtime@^7.4.4", "@babel/runtime@^7.5.5", "@babel/runtime@^7.7.2", "@babel/runtime@^7.8.4", "@babel/runtime@^7.8.7":
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.10.0", "@babel/runtime@^7.10.2", "@babel/runtime@^7.10.5", "@babel/runtime@^7.12.1", "@babel/runtime@^7.4.4", "@babel/runtime@^7.5.5", "@babel/runtime@^7.7.2", "@babel/runtime@^7.8.4", "@babel/runtime@^7.8.7":
   version "7.12.1"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.12.1.tgz#b4116a6b6711d010b2dad3b7b6e43bf1b9954740"
   integrity sha512-J5AIf3vPj3UwXaAzb5j1xM4WAQDX3EMgemF8rjCP3SoW09LfRKAXQKt6CoVYl230P6iWdRcBbnLDDdnqWxZSCA==
@@ -3095,6 +3095,14 @@ create-hmac@^1.1.0, create-hmac@^1.1.4, create-hmac@^1.1.7:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
+create-react-class@^15.6.0:
+  version "15.7.0"
+  resolved "https://registry.yarnpkg.com/create-react-class/-/create-react-class-15.7.0.tgz#7499d7ca2e69bb51d13faf59bd04f0c65a1d6c1e"
+  integrity sha512-QZv4sFWG9S5RUvkTYWbflxeZX+JG7Cz0Tn33rQBJ+WFQTqTfUTjMjiv9tnfXazjsO5r0KhPs+AqCjyrQX6h2ng==
+  dependencies:
+    loose-envify "^1.3.1"
+    object-assign "^4.1.1"
+
 cross-fetch@3.0.5:
   version "3.0.5"
   resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.0.5.tgz#2739d2981892e7ab488a7ad03b92df2816e03f4c"
@@ -3257,10 +3265,22 @@ data-uri-to-buffer@3.0.0:
   dependencies:
     buffer-from "^1.1.1"
 
+date-now@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/date-now/-/date-now-1.0.1.tgz#bb7d086438debe4182a485fb3df3fbfb99d6153c"
+  integrity sha1-u30IZDjevkGCpIX7PfP7+5nWFTw=
+
 dayjs@^1.9.4:
   version "1.9.4"
   resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.9.4.tgz#fcde984e227f4296f04e7b05720adad2e1071f1b"
   integrity sha512-ABSF3alrldf7nM9sQ2U+Ln67NRwmzlLOqG7kK03kck0mw3wlSSEKv/XhKGGxUjQcS57QeiCyNdrFgtj9nWlrng==
+
+debounce@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/debounce/-/debounce-1.0.0.tgz#0948af513d2e4ce407916f8506a423d3f9cf72d8"
+  integrity sha1-CUivUT0uTOQHkW+FBqQj0/nPctg=
+  dependencies:
+    date-now "1.0.1"
 
 debug@4, debug@^4.1.0, debug@^4.1.1:
   version "4.2.0"
@@ -3390,6 +3410,15 @@ detect-node-es@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/detect-node-es/-/detect-node-es-1.0.0.tgz#c0318b9e539a5256ca780dd9575c9345af05b8ed"
   integrity sha512-S4AHriUkTX9FoFvL4G8hXDcx6t3gp2HpfCza3Q0v6S78gul2hKWifLQbeW+ZF89+hSm2ZIc/uF3J97ZgytgTRg==
+
+didyoumean2@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/didyoumean2/-/didyoumean2-4.1.0.tgz#f813cb7c82c249443e599be077f76e88f24b85e4"
+  integrity sha512-qTBmfQoXvhKO75D/05C8m+fteQmn4U46FWYiLhXtZQInzitXLWY0EQ/2oKnpAz9g2lQWW8jYcLcT+hPJGT+kig==
+  dependencies:
+    "@babel/runtime" "^7.10.2"
+    leven "^3.1.0"
+    lodash.deburr "^4.1.0"
 
 diffie-hellman@^5.0.0:
   version "5.0.3"
@@ -4824,6 +4853,11 @@ locate-path@^5.0.0:
   dependencies:
     p-locate "^4.1.0"
 
+lodash.deburr@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/lodash.deburr/-/lodash.deburr-4.1.0.tgz#ddb1bbb3ef07458c0177ba07de14422cb033ff9b"
+  integrity sha1-3bG7s+8HRYwBd7oH3hRCLLAz/5s=
+
 lodash.flattendeep@^4.4.0:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/lodash.flattendeep/-/lodash.flattendeep-4.4.0.tgz#fb030917f86a3134e5bc9bec0d69e0013ddfedb2"
@@ -4879,7 +4913,7 @@ lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.15, lodash@^4.17.19:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
   integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
 
-loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.4.0:
+loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.3.1, loose-envify@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
   integrity sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==
@@ -4939,6 +4973,19 @@ map-visit@^1.0.0:
   integrity sha1-7Nyo8TFE5mDxtb1B8S80edmN+48=
   dependencies:
     object-visit "^1.0.0"
+
+match-sorter@^4.1.0:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/match-sorter/-/match-sorter-4.2.1.tgz#575b4b3737185ba9518b67612b66877ea0b37358"
+  integrity sha512-s+3h9TiZU9U1pWhIERHf8/f4LmBN6IXaRgo2CI17+XGByGS1GvG5VvXK9pcGyCjGe3WM3mSYRC3ipGrd5UEVgw==
+  dependencies:
+    "@babel/runtime" "^7.10.5"
+    remove-accents "0.4.2"
+
+md5-o-matic@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/md5-o-matic/-/md5-o-matic-0.1.1.tgz#822bccd65e117c514fab176b25945d54100a03c3"
+  integrity sha1-givM1l4RfFFPqxdrJZRdVBAKA8M=
 
 md5.js@^1.3.4:
   version "1.3.5"
@@ -5513,6 +5560,11 @@ oauth@^0.9.15:
   version "0.9.15"
   resolved "https://registry.yarnpkg.com/oauth/-/oauth-0.9.15.tgz#bd1fefaf686c96b75475aed5196412ff60cfb9c1"
   integrity sha1-vR/vr2hslrdUda7VGWQS/2DPucE=
+
+object-assign@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-2.0.0.tgz#f8309b09083b01261ece3ef7373f2b57b8dd7042"
+  integrity sha1-+DCbCQg7ASYezj73Nz8rV7jdcEI=
 
 object-assign@^4.0.1, object-assign@^4.1.0, object-assign@^4.1.1:
   version "4.1.1"
@@ -6228,6 +6280,17 @@ react-is@16.13.1, react-is@^16.13.1, react-is@^16.7.0, react-is@^16.8.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
+react-json-inspector@^7.1.1:
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/react-json-inspector/-/react-json-inspector-7.1.1.tgz#795e23628d5f95a019ea46490d26c52d6f2b8158"
+  integrity sha1-eV4jYo1flaAZ6kZJDSbFLW8rgVg=
+  dependencies:
+    create-react-class "^15.6.0"
+    debounce "1.0.0"
+    md5-o-matic "^0.1.1"
+    object-assign "2.0.0"
+    prop-types "^15.5.10"
+
 react-node-resolver@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-node-resolver/-/react-node-resolver-1.0.1.tgz#1798a729c0e218bf2f0e8ddf79c550d4af61d83a"
@@ -6240,6 +6303,13 @@ react-popper@^2.2.3:
   dependencies:
     react-fast-compare "^3.0.1"
     warning "^4.0.2"
+
+react-query-devtools@^2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/react-query-devtools/-/react-query-devtools-2.6.1.tgz#ccb544d1d63bfc003b851424583f5d5c85fad6d1"
+  integrity sha512-qQX7MStNIZnRzDDnWepQmBG7fn7+U4AhxVpm1Kc1smaZIUEmgW8Jt8zzCutgRbcfNbJrbGi2EhRxE5BuuhvBmg==
+  dependencies:
+    match-sorter "^4.1.0"
 
 react-query@^2.25.2:
   version "2.25.2"
@@ -6498,6 +6568,11 @@ release-zalgo@^1.0.0:
   integrity sha1-CXALflB0Mpc5Mw5TXFqQ+2eFFzA=
   dependencies:
     es6-error "^4.0.1"
+
+remove-accents@0.4.2:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/remove-accents/-/remove-accents-0.4.2.tgz#0a43d3aaae1e80db919e07ae254b285d9e1c7bb5"
+  integrity sha1-CkPTqq4egNuRngeuJUsoXZ4ce7U=
 
 remove-trailing-separator@^1.0.1:
   version "1.1.0"

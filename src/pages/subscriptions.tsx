@@ -10,7 +10,7 @@ export default function Subscriptions() {
   const subscriptions = useRecharge({
     dataType: "subscription",
     method: "listAll",
-  })
+  }) as any
 
   React.useEffect(() => {
     console.log("<Subscriptions>", subscriptions.data)

@@ -9,7 +9,7 @@ export default function Customers() {
   const customers = useRecharge({
     dataType: "customer",
     method: "listAll",
-  })
+  }) as any
 
   const searchFilter = useStringifiedObjectSearch(customers.data)
 

@@ -13,6 +13,8 @@ type PropsT = {
   crumbText?: string
   crumbRouteTo?: string
   children: any
+  actions?: any
+  bottomBar?: any
 }
 
 type LayoutHeaderPropsT = {

@@ -80,7 +80,6 @@ export default async (req, res) => {
   const secret = process.env.JWT_SECRET
   const token = await jwt.getToken({ req, secret })
   const rechargeKey = await getUserRechargeKey(token.email)
-  console.log({ email, rechargeKey })
   const recharge = getRecharge(rechargeKey)
 
   const { method, ...query } = req.query

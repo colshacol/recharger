@@ -2,7 +2,6 @@ import { Layout } from "../comps/Layout"
 import TextField from "@atlaskit/textfield"
 import { Table } from "../comps/Table"
 import { useRecharge } from "../utilities/recharge"
-import { useRechargeApi } from "../utilities/useRechargeApi"
 import { useStringifiedObjectSearch } from "../utilities/useStringifiedObjectSearch"
 
 export default function Addresses() {

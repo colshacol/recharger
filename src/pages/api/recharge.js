@@ -5,6 +5,8 @@ import jwt from "next-auth/jwt"
 const { MONGO_URL } = process.env
 export const mongo = mongojs(MONGO_URL)
 const users = mongo.collection("users")
+const secret = process.env.JWT_SECRET
+const signingKey = process.env.JWT_SIGNING_KEY
 
 const getRecharge = (apiKey) => {
   return new Recharge({
@@ -131,9 +133,9 @@ const methods = {
 }
 
 export default async (req, res) => {
-  const secret = process.env.JWT_SECRET
-  const token = await jwt.getToken({ req, secret })
-  const email = token ? token.email : "colshacol@gmail.com"
+  console.log({ req, secret, signingKey, encryption: true })
+  const token = await jwt.getToken({ req, secret, signingKey })
+  const email = token.email
   const rechargeKey = await getUserRechargeKey(email)
   const recharge = getRecharge(rechargeKey)
   console.log({ token, secret, rechargeKey })

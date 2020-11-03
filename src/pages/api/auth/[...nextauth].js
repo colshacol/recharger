@@ -24,6 +24,7 @@ const options = {
   ],
 
   jwt: {
+    signingKey: process.env.JWT_SIGNING_KEY,
     secret: process.env.JWT_SECRET,
   },
 }

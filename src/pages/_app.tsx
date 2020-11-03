@@ -9,27 +9,30 @@ import { Reset, ResetTheme } from "@atlaskit/theme"
 import { BreadcrumbsProvider } from "../comps/Breadcrumbs"
 import { QueryCacheProvider } from "../utilities/reactQuery"
 import { DiagnosticsProvider } from "../comps/DiagnosticsWrapper"
+import { CacheProvider } from "../utilities/cache/hook"
 
 function MyApp({ Component, pageProps }) {
   return (
-    <Provider session={pageProps.session}>
-      <AuthWrapper>
-        <QueryCacheProvider>
-          <>
-            <DiagnosticsProvider>
-              <ResetTheme.Provider>
-                <Reset>
-                  <BreadcrumbsProvider>
-                    <Component {...pageProps} />
-                  </BreadcrumbsProvider>
-                </Reset>
-              </ResetTheme.Provider>
-            </DiagnosticsProvider>
-            <ReactQueryDevtools initialIsOpen />
-          </>
-        </QueryCacheProvider>
-      </AuthWrapper>
-    </Provider>
+    <CacheProvider cacheName='recharger' staleTime={60000}>
+      <Provider session={pageProps.session}>
+        <ResetTheme.Provider>
+          <Reset>
+            <AuthWrapper>
+              <QueryCacheProvider>
+                <>
+                  <DiagnosticsProvider>
+                    <BreadcrumbsProvider>
+                      <Component {...pageProps} />
+                    </BreadcrumbsProvider>
+                  </DiagnosticsProvider>
+                  <ReactQueryDevtools initialIsOpen />
+                </>
+              </QueryCacheProvider>
+            </AuthWrapper>
+          </Reset>
+        </ResetTheme.Provider>
+      </Provider>
+    </CacheProvider>
   )
 }
 

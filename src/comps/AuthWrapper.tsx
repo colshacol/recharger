@@ -2,6 +2,7 @@ import { useSession, signin, signout } from "next-auth/client"
 import { useRouter } from "next/router"
 import { Spinner } from "./Atlaskit"
 import { Grid } from "./Grid"
+import Index from "../pages"
 
 export const AuthWrapper = (props) => {
   const router = useRouter()
@@ -20,6 +21,10 @@ export const AuthWrapper = (props) => {
   if (!session && !okPaths.includes(pathname)) {
     router.push("/")
     return null
+  }
+
+  if (!session && pathname === "/") {
+    return <Index />
   }
 
   if (session && pathname === "/") {

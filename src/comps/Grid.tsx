@@ -6,6 +6,7 @@ export const Box = styled(UIBox)`
 `
 
 export const Row = styled(UIBox)`
+  flex-shrink: 0;
   display: ${(props: GridPropsT) => (props.inline ? "inline-flex" : "flex")};
   width: ${(props: GridPropsT) => props.width || "100%"};
   overflow-x: ${(props: GridPropsT) => (props.scrollX ? "scroll" : "initial")};
@@ -13,6 +14,8 @@ export const Row = styled(UIBox)`
 
 export const Column = styled(UIBox)`
   display: flex;
+  height: ${(props: GridPropsT) => props.height || "100%"};
+  flex-shrink: 0;
   flex-direction: column;
   width: ${(props: GridPropsT) => props.width || (props.fullWidth && "100%") || "auto"};
   overflow-x: ${(props: GridPropsT) => (props.scrollX ? "scroll" : "initial")};
@@ -24,6 +27,7 @@ export const Container = styled(UIBox)`
   width: 100%;
   margin: 0 auto;
   flex-wrap: wrap;
+  flex-shrink: 0;
   padding: 0 48px;
   overflow-x: ${(props: GridPropsT) => (props.scrollX ? "scroll" : "initial")};
 `
@@ -53,4 +57,5 @@ type GridPropsT = {
   fullWidth?: boolean
   width?: string
   inline?: boolean
+  height?: string
 }

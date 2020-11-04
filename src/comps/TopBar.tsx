@@ -16,17 +16,6 @@ export const TopBar = (props) => {
   const isUserPopupOpen = useToggle(false)
   console.log(isUserPopupOpen.value)
 
-  const UserPopupContent = () => (
-    <Grid.Column style={{ padding: "8px", width: 160 }} alignItems='flex-start' textAlign='left'>
-      <Button appearance='link' onClick={() => signout()}>
-        Sign Out
-      </Button>
-      <Button appearance='link' onClick={() => signout()}>
-        Set API Token
-      </Button>
-    </Grid.Column>
-  )
-
   return (
     <Grid.Row
       alignItems='center'
@@ -35,6 +24,7 @@ export const TopBar = (props) => {
       paddingX='24px'
       background={colors.DN0}
       color={"white"}
+      className='TopBar'
     >
       <Grid.Container alignItems='center' justifyContent='space-between'>
         <Grid.Column>
@@ -71,3 +61,14 @@ export const TopBar = (props) => {
     </Grid.Row>
   )
 }
+
+const UserPopupContent = () => (
+  <Grid.Column style={{ padding: "8px", width: 160 }} alignItems='flex-start' textAlign='left'>
+    <Button appearance='link' onClick={() => signout()}>
+      Sign Out
+    </Button>
+    <Button appearance='link' onClick={() => signout()}>
+      Set API Token
+    </Button>
+  </Grid.Column>
+)

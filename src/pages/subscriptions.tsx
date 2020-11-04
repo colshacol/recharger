@@ -6,10 +6,7 @@ import { useRecharge } from "../utilities/recharge"
 import { useStringifiedObjectSearch } from "../utilities/useStringifiedObjectSearch"
 
 export default function Subscriptions() {
-  const subscriptions = useRecharge({
-    dataType: "subscription",
-    method: "listAll",
-  }) as any
+  const subscriptions = useRecharge("getAllSubscriptions", {}) as any
 
   React.useEffect(() => {
     console.log("<Subscriptions>", subscriptions.data)

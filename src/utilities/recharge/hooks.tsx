@@ -2,35 +2,19 @@ import { queryCache } from "../reactQuery"
 import { useRecharge, useRechargeMutation } from "."
 
 export const useAllDiscounts = () => {
-  return useRecharge({
-    key: "allDiscounts",
-    dataType: "discount",
-    method: "listAll",
-  })
+  return useRecharge("getAllDiscounts", {})
 }
 
 export const useAllCustomers = () => {
-  return useRecharge({
-    key: "allCustomers",
-    dataType: "customer",
-    method: "listAll",
-  })
+  return useRecharge("getAllCustomers", {})
 }
 
 export const useAllSubscriptions = () => {
-  return useRecharge({
-    key: "allSubscriptions",
-    dataType: "subscription",
-    method: "listAll",
-  })
+  return useRecharge("getAllSubscriptions", {})
 }
 
 export const useAllAddresses = () => {
-  return useRecharge({
-    key: "allAddresses",
-    dataType: "address",
-    method: "listAll",
-  })
+  return useRecharge("getAllAddresses", {})
 }
 
 const useAll = {

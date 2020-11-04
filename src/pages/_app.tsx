@@ -20,12 +20,12 @@ function MyApp({ Component, pageProps }) {
             <AuthWrapper>
               <QueryCacheProvider>
                 <>
-                  <DiagnosticsProvider>
-                    <BreadcrumbsProvider>
-                      <Component {...pageProps} />
-                    </BreadcrumbsProvider>
-                  </DiagnosticsProvider>
-                  <ReactQueryDevtools initialIsOpen />
+                  {/* <DiagnosticsProvider> */}
+                  <BreadcrumbsProvider>
+                    <Component {...pageProps} />
+                  </BreadcrumbsProvider>
+                  {/* </DiagnosticsProvider> */}
+                  <ReactQueryDevtools initialIsOpen={false} />
                 </>
               </QueryCacheProvider>
             </AuthWrapper>

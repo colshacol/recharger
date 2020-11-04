@@ -15,10 +15,7 @@ import { Spacer } from "../comps/Spacer"
 import { useStringifiedObjectSearch } from "../utilities/useStringifiedObjectSearch"
 
 export default function Discounts() {
-  const discounts = useRecharge({
-    dataType: "discount",
-    method: "listAll",
-  }) as any
+  const discounts = useRecharge("getAllDiscounts", {}) as any
 
   const searchFilter = useStringifiedObjectSearch(discounts.data)
   console.log(discounts, searchFilter)

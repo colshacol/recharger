@@ -5,10 +5,7 @@ import { useRecharge } from "../utilities/recharge"
 import { useStringifiedObjectSearch } from "../utilities/useStringifiedObjectSearch"
 
 export default function Addresses() {
-  const addresses = useRecharge({
-    dataType: "address",
-    method: "listAll",
-  }) as any
+  const addresses = useRecharge("getAllAddresses", {}) as any
 
   const searchFilter = useStringifiedObjectSearch(addresses.data)
   console.log(addresses, searchFilter)

@@ -1,6 +1,7 @@
 import Recharge from "recharge-api-node"
 import mongojs from "mongojs"
 import jwt from "next-auth/jwt"
+import isEmpty from "is-empty"
 
 const { MONGO_URL } = process.env
 export const mongo = mongojs(MONGO_URL)
@@ -20,6 +21,7 @@ const getUserRechargeKey = (emailAddress) => {
     users.findOne({ emailAddress }, (err, doc) => {
       err && console.log("mongo err", { err })
       err && reject(err)
+      console.log("getUserRechargeKey", doc.rechargeApiKey)
       return resolve(doc.rechargeApiKey)
     })
   })
@@ -44,6 +46,7 @@ async function count(req, res, query, recharge) {
 
 async function listAll(req, res, query, recharge) {
   const { dataType } = req.query
+  console.log("LIST_ALL", { dataType })
   const count = await recharge[dataType].count()
   const pageCount = Math.ceil(count / 250)
   const iterable = Array(pageCount).fill([recharge[dataType]])
@@ -55,7 +58,8 @@ async function listAll(req, res, query, recharge) {
 }
 
 async function get(req, res, query, recharge) {
-  const { dataType, arg, ...params } = query
+  const { dataType, arg, ...paramsObject } = query
+  const params = isEmpty(paramsObject) ? undefined : paramsObject
   console.log("GET", { dataType, arg, params })
   const data = await recharge[dataType].get(arg, params)
   return res.json(data)
@@ -63,6 +67,7 @@ async function get(req, res, query, recharge) {
 
 async function list(req, res, query, recharge) {
   const { dataType, arg, ...params } = query
+  console.log("LIST", { dataType, arg, params })
   const args = arg ? [arg, params] : [params]
   const data = await recharge[dataType].list(...args)
   return res.json(data)
@@ -133,13 +138,20 @@ const methods = {
 }
 
 export default async (req, res) => {
-  console.log({ req, secret, signingKey, encryption: true })
-  const token = await jwt.getToken({ req, secret, signingKey })
-  const email = token.email
+  const email = await getEmailFromToken(req)
   const rechargeKey = await getUserRechargeKey(email)
   const recharge = getRecharge(rechargeKey)
-  console.log({ token, secret, rechargeKey })
 
   const { method, ...query } = req.query
   return methods[method](req, res, query, recharge)
+}
+
+const getEmailFromToken = async (req) => {
+  if (process.env.NODE_ENV === "development") {
+    return "colshacol@gmail.com"
+  }
+
+  const token = await jwt.getToken({ req, secret, signingKey })
+  console.log("getEmailFromToken", token.email)
+  return token.email
 }

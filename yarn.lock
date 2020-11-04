@@ -206,6 +206,20 @@
     react-beautiful-dnd "^12.1.1"
     tslib "^2.0.0"
 
+"@atlaskit/flag@^14.0.7":
+  version "14.0.7"
+  resolved "https://registry.yarnpkg.com/@atlaskit/flag/-/flag-14.0.7.tgz#d29353628c61874b9ad430baa4fa6f031b6885e7"
+  integrity sha512-UzGXBCH3EJ6wQuolVhZlmMCxSHtLE28ky+C9QeAdqu0cCoQIKXhGWS6in/86R0OhH7wc/fUrkn+SrAq+qb9nhw==
+  dependencies:
+    "@atlaskit/analytics-next" "^8.0.0"
+    "@atlaskit/button" "^15.1.0"
+    "@atlaskit/icon" "^21.0.0"
+    "@atlaskit/motion" "^0.4.0"
+    "@atlaskit/portal" "^4.0.0"
+    "@atlaskit/theme" "^11.0.0"
+    "@emotion/core" "^10.0.9"
+    tslib "^2.0.0"
+
 "@atlaskit/form@^8.1.6":
   version "8.1.6"
   resolved "https://registry.yarnpkg.com/@atlaskit/form/-/form-8.1.6.tgz#89efe76f8c7faea256c990c6f567d3e140182d28"

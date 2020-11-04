@@ -1,10 +1,11 @@
-import Page, { Grid } from "@atlaskit/page"
+import Page from "@atlaskit/page"
 import PageHeader from "@atlaskit/page-header"
 import { colors } from "@atlaskit/theme"
 import { Link } from "./Link"
+import { Text } from "./Text"
 import { useRef } from "react"
 import { Breadcrumbs, useCrumb } from "./Breadcrumbs"
-import { Column, Container, Row } from "./Grid"
+import { Grid } from "./Grid"
 import { Spacer } from "./Spacer"
 import { TopBar } from "./TopBar"
 
@@ -27,11 +28,11 @@ function LayoutHeader(props: LayoutHeaderPropsT) {
   const breadcrumbs = <Breadcrumbs />
 
   return (
-    <Container data-widechild>
+    <Grid.Container data-widechild className='LayoutHeader'>
       <PageHeader breadcrumbs={breadcrumbs} actions={props.actions} bottomBar={props.bottomBar}>
         {props.title}
       </PageHeader>
-    </Container>
+    </Grid.Container>
   )
 }
 
@@ -45,15 +46,20 @@ export const Layout: React.FunctionComponent<PropsT> = (props) => {
     })
 
   return (
-    <Column width='100%'>
+    <Grid.Column width='100%' className='Layout' height='100%'>
       <TopBar />
       <LayoutNavigation />
-      <Page data-cid='Layout'>
+      <Grid.Column
+        data-testid='LayoutBody'
+        maxHeight='calc(100vh - 112px)'
+        overflowY='scroll'
+        paddingBottom='24px'
+      >
         <LayoutHeader {...props} />
         {props.children}
-      </Page>
+      </Grid.Column>
       <Spacer size='24px' />
-    </Column>
+    </Grid.Column>
   )
 }
 
@@ -74,14 +80,17 @@ type LayoutNavigationPropsT = {}
 
 const LayoutNavigation: React.FunctionComponent<LayoutNavigationPropsT> = (props) => {
   return (
-    <Row css={{ background: colors.B400, height: 48, display: "flex", alignItems: "center" }}>
-      <Container>
+    <Grid.Row
+      css={{ background: colors.B400, height: 48, display: "flex", alignItems: "center" }}
+      className='LayoutNavigation'
+    >
+      <Grid.Container>
         <LayoutNavigationLink href='/home' text='Home' />
         <LayoutNavigationLink href='/discounts' text='Discounts' />
         <LayoutNavigationLink href='/subscriptions' text='Subscriptions' />
         <LayoutNavigationLink href='/addresses' text='Addresses' />
         <LayoutNavigationLink href='/customers' text='Customers' />
-      </Container>
-    </Row>
+      </Grid.Container>
+    </Grid.Row>
   )
 }

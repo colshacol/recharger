@@ -18,66 +18,13 @@ import { queryCache } from "../utilities/reactQuery"
 import { useRechargeMutation } from "../utilities/recharge"
 
 export default function Home() {
-  const diagnostics = useDiagnostics()
-  const getCustomer = (id) => diagnostics.data.customers.find((item) => item.id === id)
-  const multiAddressCustomerIds = diagnostics.data?.multiAddressCustomers
-  const mismatchDiscountCustomerIds = diagnostics.data?.mismatchDiscountCodes
-
-  const showInactiveMismatches = useToggle(false)
-  const showInactiveMultiAddress = useToggle(false)
-
   return (
     <Layout title='Home'>
       <Grid.Container>
         <Grid.Column width='100%' padding='24px'>
-          <Grid.Row justifyContent='space-between'>
-            <Text is='h3'>Multi-Address Customers</Text>
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              <Checkbox
-                label='Show Inactive'
-                isChecked={showInactiveMultiAddress.value}
-                onChange={showInactiveMultiAddress.toggle}
-                id='show-canceled-customers'
-                name='show-canceled-customers'
-              />
-            </div>
-          </Grid.Row>
-          <Spacer size='24px' />
-          <Grid.Row flexWrap='wrap' width='100%' style={{ gap: 24 }}>
-            {multiAddressCustomerIds?.map((id) => (
-              <MultiAddressCustomer
-                key={id}
-                customer={getCustomer(id)}
-                showInactive={showInactiveMultiAddress.value}
-              />
-            ))}
-          </Grid.Row>
-        </Grid.Column>
-        <Grid.Column width='100%' padding='24px'>
-          <Grid.Row justifyContent='space-between'>
-            <Text is='h3'>Mismatch Discount Customers</Text>
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              <Checkbox
-                label='Show Inactive'
-                isChecked={showInactiveMismatches.value}
-                onChange={showInactiveMismatches.toggle}
-                id='show-canceled-subscriptions'
-                name='show-canceled-subscriptions'
-              />
-            </div>
-          </Grid.Row>
-          <Spacer size='24px' />
-          <Grid.Row flexWrap='wrap' width='100%' style={{ gap: 24 }}>
-            {mismatchDiscountCustomerIds?.map((id) => (
-              <MultiAddressCustomer
-                key={id}
-                customer={getCustomer(id)}
-                showInactive={showInactiveMismatches.value}
-              >
-                <MismatchFixer customer={getCustomer(id)} />
-              </MultiAddressCustomer>
-            ))}
-          </Grid.Row>
+          <div>
+            <p>content...</p>
+          </div>
         </Grid.Column>
       </Grid.Container>
     </Layout>

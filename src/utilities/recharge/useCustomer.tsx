@@ -1,5 +1,5 @@
 import { queryCache } from "../reactQuery"
-import { useRecharge, useRechargeMutation } from "./"
+import { useRecharge, useRechargeMutation } from "../recharge"
 
 export function useCustomer(id, options = {}) {
   const invalidateKeys = [

@@ -4,7 +4,7 @@ import { Spinner } from "./Atlaskit"
 import sift from "sift"
 // import store from "store"
 import didYouMean from "didyoumean2"
-import { fetcher } from "../utilities/recharge/fetcher"
+import { fetcher } from "../utilities/recharge"
 import { createContextHook } from "@kensie/create-context-hook"
 import { Grid } from "./Grid"
 import { Text } from "./Text"
@@ -106,7 +106,6 @@ const getDiagnostics = (allData) => {
 
       for (const discount of address.discounts) {
         if (discount.status !== "CANCELLED") {
-          console.log({ discount })
           discount.isMismatch = !NORMAL_CODES.includes(discount.code)
           // discount.isMismatch && (discount.suggestedCode = getClosestCode(discount.code))
           discount.isMismatch && (discount.suggestedCode = `BOXOF${customer.activeSubscriptionCount}`)

@@ -1,10 +1,11 @@
 import { queryCache } from "../reactQuery"
+import qs from "query-string"
 import { useQuery, useMutation } from "react-query"
-import { fetcher } from "./fetcher"
+import { fetcher } from "../recharge"
 
-export const useRecharge = (options) => {
-  const { key, ...otherOptions } = options
-  const fetch = () => fetcher.get(otherOptions)
+export const useRecharge = (which, options = {}) => {
+  const key = qs.stringify({ which, ...options })
+  const fetch = () => fetcher.get(options)
   const query = useQuery(key, fetch)
   return query
 }

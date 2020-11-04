@@ -5,6 +5,7 @@ export const queryCache = new QueryCache({
     queries: {
       // staleTime: 120000,
       // refetchOnWindowFocus: false,
+      refetchOnWindowFocus: false,
     },
   },
 })

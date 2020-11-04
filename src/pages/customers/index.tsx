@@ -8,7 +8,7 @@ import dayjs from "dayjs"
 import { useAllCustomers } from "../../utilities/recharge/hooks"
 
 export default function Customers() {
-  const customers = useAllCustomers() as any
+  const customers = useRecharge("getAllCustomers", {}) as any
   const searchFilter = useStringifiedObjectSearch(customers.data)
 
   const barContent = (

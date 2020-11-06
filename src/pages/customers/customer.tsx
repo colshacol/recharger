@@ -37,7 +37,7 @@ export default function Customer(props) {
 }
 
 const CustomerPage = (props) => {
-  const query = useCustomerPage(props.id)
+  const query = useCustomerPage(props.id) as any
   const customer = query.data
 
   console.log({ props, query, customer })

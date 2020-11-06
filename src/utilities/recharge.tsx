@@ -1,3 +1,4 @@
+import store from "store"
 // import qs from "query-string"
 import qs from "query-string"
 import { useMutation, useQuery } from "react-query"
@@ -33,7 +34,13 @@ const fetchPlease = async (url) => {
 export const useAllCustomers = () => {
   const key = `/api/v0/getCustomers`
   const query = useQuery(key, () => fetchPlease(key))
-  return query
+  const data = store.get(key)
+  query.data && store.set(key, query.data)
+
+  return {
+    ...query,
+    data: query.data || data,
+  }
 }
 
 const fetchCustomerPage = async (id) => {
@@ -58,6 +65,12 @@ export const updateDiscountCode = async (options) => {
 
 export const useDiscountFixer = () => {
   return useMutation(updateDiscountCode)
+}
+
+export const useProducts = () => {
+  const key = `/api/v0/getProducts`
+  const query = useQuery(key, () => fetchPlease(key))
+  return query
 }
 
 export const useRecharge = (which, options = {}) => {

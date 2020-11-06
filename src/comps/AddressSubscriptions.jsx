@@ -58,8 +58,12 @@ const getDiscountStuff = (props) => {
     return item.status === "ACTIVE"
   })
 
+  const activeQuantity = activeSubs.reduce((final, item) => {
+    return final + item.quantity
+  }, 0)
+
   if (activeSubs.length > 1) {
-    const expectedCode = `BOXOF${activeSubs.length}`
+    const expectedCode = `BOXOF${activeQuantity}`
     const isWrong = !areCodesEqual(actualCode, expectedCode)
     const isVariance = !isWrong && expectedCode !== actualCode
     const data = { expectedCode, actualCode, isWrong, isVariance, ...props }

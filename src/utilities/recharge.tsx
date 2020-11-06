@@ -4,6 +4,7 @@ import { useMutation, useQuery } from "react-query"
 import { fetcher } from "./fetcher"
 import { queryCache } from "./reactQuery"
 
+export { fetcher }
 // export const useCustomerPage = (id) => {
 //   const which = "getCustomerPage"
 //   const key = qs.stringify({ which, id })

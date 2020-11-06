@@ -67,8 +67,14 @@ export const useDiscountFixer = () => {
   return useMutation(updateDiscountCode)
 }
 
-export const useProducts = () => {
+export const useAllProducts = () => {
   const key = `/api/v0/getProducts`
+  const query = useQuery(key, () => fetchPlease(key))
+  return query
+}
+
+export const useProduct = (id) => {
+  const key = `/api/v0/getOne?dataType=product&id=${id}`
   const query = useQuery(key, () => fetchPlease(key))
   return query
 }

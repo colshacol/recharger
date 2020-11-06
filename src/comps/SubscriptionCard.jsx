@@ -82,8 +82,8 @@ const useSubscriptionCardActions = (subscription) => {
 
   // TODO: Make href dynamic.
   const viewInShopifyAction = {
-    label: "View In Shopify",
-    href: "buy.pedersonsfarms.com/admin/apps/0009de8c024a6126315f5dcd4250fd61/orders",
+    label: "View Product In Shopify",
+    href: `https://buy.pedersonsfarms.com/admin/products/${subscription.shopify_product_id}`,
   }
 
   return [cancelSubscriptionAction, { type: "divider" }, viewInShopifyAction]

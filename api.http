@@ -6,6 +6,10 @@ GET {{apiRoot}}/v0/getCustomers HTTP/1.1
 
 ###
 
+GET {{apiRoot}}/v0/updateCache HTTP/1.1
+
+###
+
 GET {{apiRoot}}/v0/getCustomerPage?id=52496263 HTTP/1.1
 
 ###

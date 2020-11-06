@@ -15,59 +15,7 @@ import { TopBar } from "#comps/TopBar"
 import { Icon, Button, PaginationBar, PaginationBarWithBasicItems } from "#comps/clay"
 import { Grid } from "#comps/Grid"
 import { Spinner } from "#comps/Atlaskit"
-
-const lowerString = (item) => {
-  return typeof item === "string" ? item.toLowerCase() : JSON.stringify(item).toLowerCase()
-}
-
-const getMatches = mems((list, fields, input) => {
-  if (!input) return list
-
-  return list.filter((item) => {
-    console.log("filtering...", input)
-    return fields.reduce((final, field) => {
-      if (final) return true
-      return lowerString(item[field]).includes(input)
-    }, false)
-  })
-})
-
-// const useTableSearchFilter = (data = [], fields) => {
-//   const [value, updateValue] = useImmer("")
-//   const [filteredItems, setFilteredItems] = useState(data)
-//   const [originals, setOriginals] = useImmer({ data, fields })
-//   const timeout = useRef(null)
-
-//   useEffect(() => {
-//     if (data.length) {
-//       setFilteredItems(data)
-
-//       setOriginals((draft) => {
-//         draft.data = data
-//       })
-//     }
-//   }, [data.length])
-
-//   const setValue = (eventOrValue) => {
-//     const value = typeof eventOrValue === "string" ? eventOrValue : eventOrValue?.target?.value
-//     timeout.current && clearTimeout(timeout.current)
-
-//     updateValue((draft) => {
-//       return value
-//     })
-
-//     timeout.current = setTimeout(() => {
-//       setFilteredItems(getMatches(originals.data, originals.fields, value))
-//       clearTimeout(timeout.current)
-//     }, 500)
-//   }
-
-//   return {
-//     filteredItems,
-//     value,
-//     setValue,
-//   }
-// }
+import { useTableState } from "#utilities/useTableState"
 
 const Pagination = (props) => {
   return (
@@ -81,93 +29,6 @@ const Pagination = (props) => {
       />
     </Layout.Row>
   )
-}
-
-const useTableState = ({ data, filterKeys, pageSize }) => {
-  const timeout = useRef(null)
-  const original = useRef({ data, filterKeys })
-
-  const [state, setState] = useImmer({
-    searchValue: "",
-    filteredData: [],
-    pages: 1,
-    currentPage: 1,
-  })
-
-  const getPagination = (data) => {
-    return {
-      pages: Math.max(1, Math.ceil(data.length / pageSize)),
-      currentPage: 1,
-    }
-  }
-
-  const updateFilteredData = () => {
-    setState((draft) => {
-      const data = getMatches(original.current.data, original.current.filterKeys, draft.searchValue)
-      Object.assign(draft, getPagination(data))
-      draft.filteredData = data
-    })
-  }
-
-  const goToPage = (number) => {
-    console.log({ number })
-    setState((draft) => {
-      draft.currentPage = number
-    })
-  }
-
-  const goToNextPage = () => {
-    setState((draft) => {
-      if (draft.pages < draft.currentPage) {
-        draft.currentPage++
-      }
-    })
-  }
-
-  const goToPreviousPage = () => {
-    setState((draft) => {
-      if (draft.currentPage > 1) {
-        draft.currentPage--
-      }
-    })
-  }
-
-  const setValue = (event) => {
-    timeout.current && clearTimeout(timeout.current)
-
-    timeout.current = setTimeout(() => {
-      updateFilteredData()
-      clearTimeout(timeout.current)
-    }, 500)
-
-    setState((draft) => {
-      draft.searchValue = event.target.value
-    })
-  }
-
-  useEffect(() => {
-    data.length &&
-      setState((draft) => {
-        original.current.data = data
-        draft.filteredData = data
-        Object.assign(draft, getPagination(data))
-      })
-  }, [data.length])
-
-  const startCut = (state.currentPage - 1) * pageSize
-  const endCut = startCut + pageSize
-  const pageData = state.filteredData.slice(startCut, endCut)
-  console.log({ startCut, endCut, pageData })
-
-  return {
-    ...original.current,
-    ...state,
-    setValue,
-    pageData,
-    goToNextPage,
-    goToPreviousPage,
-    goToPage,
-  }
 }
 
 const filterKeys = [
@@ -191,8 +52,6 @@ export default function Customers() {
     filterKeys,
     pageSize: 10,
   })
-
-  console.log({ customers, table })
 
   return (
     <>

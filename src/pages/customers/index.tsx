@@ -13,6 +13,8 @@ import { useImmer } from "use-immer"
 import mems from "mems"
 import { TopBar } from "#comps/TopBar"
 import { Icon, Button, PaginationBar, PaginationBarWithBasicItems } from "#comps/clay"
+import { Grid } from "#comps/Grid"
+import { Spinner } from "#comps/Atlaskit"
 
 const lowerString = (item) => {
   return typeof item === "string" ? item.toLowerCase() : JSON.stringify(item).toLowerCase()
@@ -194,79 +196,87 @@ export default function Customers() {
     <>
       <TopBar />
       <Layout.Container view>
-        <Pagination {...table} />
-        <Layout.Col>
-          <Table noWrap headingNoWrap borderedColumns style={{ paddingBottom: 16 }}>
-            <Table.Head>
-              <Table.Row>
-                <Table.Cell headingCell headingTitle>
-                  Shopify Customer Id
-                </Table.Cell>
-                <Table.Cell headingCell headingTitle>
-                  Email Address
-                </Table.Cell>
-                <Table.Cell headingCell headingTitle>
-                  Status
-                </Table.Cell>
-                <Table.Cell headingCell headingTitle>
-                  First Name
-                </Table.Cell>
-                <Table.Cell headingCell headingTitle>
-                  Last Name
-                </Table.Cell>
-                <Table.Cell headingCell headingTitle>
-                  Created Date
-                </Table.Cell>
-                <Table.Cell headingCell headingTitle>
-                  Billing Address
-                </Table.Cell>
-                <Table.Cell headingCell headingTitle>
-                  Billing City
-                </Table.Cell>
-                <Table.Cell headingCell headingTitle>
-                  Billing Province
-                </Table.Cell>
-                <Table.Cell headingCell headingTitle>
-                  Billing Zip
-                </Table.Cell>
-                <Table.Cell headingCell headingTitle>
-                  Billing Country
-                </Table.Cell>
-                <Table.Cell headingCell headingTitle>
-                  Billing Phone
-                </Table.Cell>
-              </Table.Row>
-            </Table.Head>
-            <Table.Body>
-              {table.pageData.map((customer, index) => (
-                <Table.Row key={customer.id}>
-                  <Table.Cell headingTitle>
-                    <Link href={{ pathname: `/customers/customer`, query: { id: customer.id } }}>
-                      {customer.shopify_customer_id}
-                    </Link>
-                  </Table.Cell>
-                  <Table.Cell>{customer.email}</Table.Cell>
-                  <Table.Cell>
-                    {customer.status === "ACTIVE" ? (
-                      <Label displayType='success'>ACTIVE</Label>
-                    ) : (
-                      <Label displayType='secondary'>INACTIVE</Label>
-                    )}
-                  </Table.Cell>
-                  <Table.Cell>{customer.first_name}</Table.Cell>
-                  <Table.Cell>{customer.last_name}</Table.Cell>
-                  <Table.Cell>{dayjs(customer.created_at).format("MM/DD/YYYY")}</Table.Cell>
-                  <Table.Cell>{customer.billing_address1}</Table.Cell>
-                  <Table.Cell>{customer.billing_city}</Table.Cell>
-                  <Table.Cell>{customer.billing_province}</Table.Cell>
-                  <Table.Cell>{customer.billing_zip}</Table.Cell>
-                  <Table.Cell>{customer.billing_country}</Table.Cell>
-                  <Table.Cell>{customer.billing_phone}</Table.Cell>
-                </Table.Row>
-              ))}
-            </Table.Body>
-          </Table>
-        </Layout.Col>
+        {customers.isLoading ? (
+          <Grid.Container width='100%' marginY='48px' paddingY='48px' justifyContent='center'>
+            <Spinner size='xlarge' />
+          </Grid.Container>
+        ) : (
+          <>
+            <Pagination {...table} />
+            <Layout.Col>
+              <Table noWrap headingNoWrap borderedColumns style={{ paddingBottom: 16 }}>
+                <Table.Head>
+                  <Table.Row>
+                    <Table.Cell headingCell headingTitle>
+                      Shopify Customer Id
+                    </Table.Cell>
+                    <Table.Cell headingCell headingTitle>
+                      Email Address
+                    </Table.Cell>
+                    <Table.Cell headingCell headingTitle>
+                      Status
+                    </Table.Cell>
+                    <Table.Cell headingCell headingTitle>
+                      First Name
+                    </Table.Cell>
+                    <Table.Cell headingCell headingTitle>
+                      Last Name
+                    </Table.Cell>
+                    <Table.Cell headingCell headingTitle>
+                      Created Date
+                    </Table.Cell>
+                    <Table.Cell headingCell headingTitle>
+                      Billing Address
+                    </Table.Cell>
+                    <Table.Cell headingCell headingTitle>
+                      Billing City
+                    </Table.Cell>
+                    <Table.Cell headingCell headingTitle>
+                      Billing Province
+                    </Table.Cell>
+                    <Table.Cell headingCell headingTitle>
+                      Billing Zip
+                    </Table.Cell>
+                    <Table.Cell headingCell headingTitle>
+                      Billing Country
+                    </Table.Cell>
+                    <Table.Cell headingCell headingTitle>
+                      Billing Phone
+                    </Table.Cell>
+                  </Table.Row>
+                </Table.Head>
+                <Table.Body>
+                  {table.pageData.map((customer, index) => (
+                    <Table.Row key={customer.id}>
+                      <Table.Cell headingTitle>
+                        <Link href={{ pathname: `/customers/customer`, query: { id: customer.id } }}>
+                          {customer.shopify_customer_id}
+                        </Link>
+                      </Table.Cell>
+                      <Table.Cell>{customer.email}</Table.Cell>
+                      <Table.Cell>
+                        {customer.status === "ACTIVE" ? (
+                          <Label displayType='success'>ACTIVE</Label>
+                        ) : (
+                          <Label displayType='secondary'>INACTIVE</Label>
+                        )}
+                      </Table.Cell>
+                      <Table.Cell>{customer.first_name}</Table.Cell>
+                      <Table.Cell>{customer.last_name}</Table.Cell>
+                      <Table.Cell>{dayjs(customer.created_at).format("MM/DD/YYYY")}</Table.Cell>
+                      <Table.Cell>{customer.billing_address1}</Table.Cell>
+                      <Table.Cell>{customer.billing_city}</Table.Cell>
+                      <Table.Cell>{customer.billing_province}</Table.Cell>
+                      <Table.Cell>{customer.billing_zip}</Table.Cell>
+                      <Table.Cell>{customer.billing_country}</Table.Cell>
+                      <Table.Cell>{customer.billing_phone}</Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table>
+            </Layout.Col>
+          </>
+        )}
       </Layout.Container>
     </>
   )

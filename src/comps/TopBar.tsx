@@ -59,10 +59,7 @@ export const TopBar = (props) => {
 
             {!session && (
               <div style={{ display: "inline-flex", alignItems: "center", marginLeft: 24 }}>
-                <Button
-                  displayType='primary'
-                  onClick={() => signin("auth0", { callbackUrl: `${process.env.APP_URL}/auth/success` })}
-                >
+                <Button displayType='primary' onClick={() => signin("auth0")}>
                   Sign in
                 </Button>
               </div>

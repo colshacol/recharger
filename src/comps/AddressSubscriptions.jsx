@@ -1,8 +1,9 @@
 import { useDiscountFixer } from "#utilities/recharge"
-import { Card, Icon, Sticker, Checkbox, Layout, Alert, Button } from "./clay"
+import { Card, Icon, Sticker, Checkbox, Layout, Alert, Button, LoadingIndicator } from "./clay"
 import { Spacer } from "./Spacer"
 import { SubscriptionCard } from "./SubscriptionCard"
 import { queryCache } from "../utilities/reactQuery"
+import { Spinner } from "./Atlaskit"
 
 const DiscountCodeAlert = (props) => {
   const key = `/api/v0/getCustomerPage?id=${props.customer.id}`
@@ -29,7 +30,9 @@ const DiscountCodeAlert = (props) => {
       Expected code "{props.expectedCode}" but found "{props.actualCode}".
       <Alert.Footer>
         <Button.Group>
-          <Button onClick={fixIt}>Fix Now</Button>
+          <Button displayType='secondary' onClick={fixIt}>
+            {fixStuff.isLoading ? <LoadingIndicator small /> : "Fix Now"}
+          </Button>
         </Button.Group>
       </Alert.Footer>
     </Alert>
@@ -75,7 +78,7 @@ const getDiscountStuff = (props) => {
   return {
     actualCode,
     expectedCode: null,
-    isWrong: areCodesEqual(actualCode, expectedCode),
+    isWrong: areCodesEqual(actualCode, null),
     alert: null,
   }
 }
@@ -89,7 +92,7 @@ export const AddressSubscriptions = (props) => {
   return (
     <Layout.ContentSection>
       <p style={{ fontSize: 20, marginTop: 12 }}>
-        {title} <span style={{ fontWeight: 700 }}>({codeStuff.actualCode})</span>
+        {title} {codeStuff.actualCode && <span style={{ fontWeight: 700 }}>({codeStuff.actualCode})</span>}
       </p>
       {codeStuff.alert}
       <Card.Group label=''>

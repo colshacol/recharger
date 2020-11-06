@@ -4,19 +4,66 @@ import { useMutation, useQuery } from "react-query"
 import { fetcher } from "./fetcher"
 import { queryCache } from "./reactQuery"
 
-export const useCustomerPage = (id) => {
-  const which = "getCustomerPage"
-  const key = qs.stringify({ which, id })
-  const fetch = () => fetcher[which](id)
-  const query = useQuery(key, fetch)
+// export const useCustomerPage = (id) => {
+//   const which = "getCustomerPage"
+//   const key = qs.stringify({ which, id })
+//   const fetch = () => fetcher[which](id)
+//   const query = useQuery(key, fetch)
+//   return query
+// }
+
+const shouldRetry = (count, error) => {
+  console.log({ count, error })
+  return false
+}
+
+const fetchAllCustomers = async () => {
+  const response = await fetch("/api/v0/getCustomers")
+  const json = await response.json()
+  return json
+}
+
+const fetchPlease = async (url) => {
+  const response = await fetch(url)
+  const json = await response.json()
+  return json
+}
+
+export const useAllCustomers = () => {
+  const key = `/api/v0/getCustomers`
+  const query = useQuery(key, () => fetchPlease(key))
   return query
+}
+
+const fetchCustomerPage = async (id) => {
+  const response = await fetch(`/api/v0/getCustomerPage?id=${id}`)
+  const json = await response.json()
+  return json
+}
+
+export const useCustomerPage = (id) => {
+  const key = `/api/v0/getCustomerPage?id=${id}`
+  const query = useQuery(key, () => fetchPlease(key))
+  return query
+}
+
+export const updateDiscountCode = async (options) => {
+  const queryString = qs.stringify(options)
+  console.log({ queryString })
+  const response = await fetch("/api/v0/updateDiscountCode?" + queryString)
+  const json = await response.json()
+  return json
+}
+
+export const useDiscountFixer = () => {
+  return useMutation(updateDiscountCode)
 }
 
 export const useRecharge = (which, options = {}) => {
   console.log("useRecharge", { which, options })
   const key = qs.stringify({ which, ...options })
   const fetch = () => fetcher[which](options)
-  const query = useQuery(key, fetch)
+  const query = useQuery(key, fetch, { retry: shouldRetry })
   return query
 }
 

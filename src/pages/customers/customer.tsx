@@ -16,7 +16,6 @@ import InfoIcon from "@atlaskit/icon/glyph/info"
 import { N800 } from "@atlaskit/theme/colors"
 import { Y200 } from "@atlaskit/theme/colors"
 import Flag from "@atlaskit/flag"
-import { Layout } from "../../comps/Layout"
 import { ListSection } from "../../comps/ListSection"
 import { SectionMessage } from "../../comps/SectionMessage"
 import { Spacer } from "../../comps/Spacer"
@@ -27,7 +26,9 @@ import { useCustomerPage, useDiscountCodeFixer, useRecharge } from "../../utilit
 import * as $recharge from "../../utilities/recharge/utilites"
 import { useStringifiedObjectSearch } from "../../utilities/useStringifiedObjectSearch"
 import { useToggle } from "../../utilities/useToggle"
-import Button from "@atlaskit/button"
+import { AddressSubscriptions } from "#comps/AddressSubscriptions"
+import { Label, Table, Layout } from "../../comps/clay"
+import { TopBar } from "#comps/TopBar"
 
 export default function Customer(props) {
   const router = useRouter()
@@ -35,59 +36,57 @@ export default function Customer(props) {
   return id ? <CustomerPage id={id} path={router.asPath} /> : <Spinner size='xlarge' />
 }
 
-const sectionMessageContainerCss = css`
-  > section {
-    width: 100%;
-  }
-`
-
 const CustomerPage = (props) => {
-  const query = useRecharge("getCustomerPageData", { id: props.id })
+  const query = useCustomerPage(props.id)
   const customer = query.data
 
-  console.log({ query })
+  console.log({ props, query, customer })
 
   return (
-    <Layout title={`Customer (${props.id})`} crumbText='Customer' crumbRouteTo={props.path}>
-      {query.isLoading && (
-        <>
-          <Spacer size='24px' />
-          <Grid.Container alignItems='center' justifyContent='center' className='SpinnerContainer'>
-            <Spinner size='xlarge' />
-          </Grid.Container>
-          <Spacer size='48px' />
-        </>
-      )}
+    <>
+      <TopBar />
+      <Layout.Container view>
+        {query.isLoading && (
+          <>
+            <Spacer size='24px' />
+            <Grid.Container alignItems='center' justifyContent='center' className='SpinnerContainer'>
+              <Spinner size='xlarge' />
+            </Grid.Container>
+            <Spacer size='48px' />
+          </>
+        )}
 
-      {!query.isLoading && (
-        <>
-          <Grid.Container className='PageHeader'>
-            <Grid.Row>
-              <CustomerCard customer={customer} />
-            </Grid.Row>
-          </Grid.Container>
-
-          <Spacer size='24px' />
-
-          <Grid.Container>
-            <Grid.Column width='100%' padding='24px'>
-              <Grid.Row justifyContent='space-between' width='100%' flexWrap='nowrap'>
-                <Text is='h2'>
-                  Addresses{" "}
-                  <Text is='span' fontSize='16px' pb='2px' position='relative' bottom='1px' opacity='0.7'>
-                    ({customer.addresses.length})
-                  </Text>
-                </Text>
+        {!query.isLoading && (
+          <>
+            <Grid.Container className='PageHeader'>
+              <Grid.Row>
+                <CustomerCard customer={customer} />
               </Grid.Row>
-              {customer.addresses.map((address) => (
-                <AddressSection key={address.id} address={address} />
-              ))}
-            </Grid.Column>
-          </Grid.Container>
-          <Spacer size='48px' />
-        </>
-      )}
-    </Layout>
+            </Grid.Container>
+
+            <Spacer size='24px' />
+
+            <Grid.Container>
+              <Grid.Column width='100%' padding='24px'>
+                <Grid.Row justifyContent='space-between' width='100%' flexWrap='nowrap'>
+                  <Text is='h2'>
+                    Addresses{" "}
+                    <Text is='span' fontSize='16px' pb='2px' position='relative' bottom='1px' opacity='0.7'>
+                      ({customer.addresses.length})
+                    </Text>
+                  </Text>
+                </Grid.Row>
+                {customer.addresses.map((address) => (
+                  <AddressSubscriptions customer={customer} address={address} key={address.id} />
+                  // <AddressSection key={address.id} address={address} />
+                ))}
+              </Grid.Column>
+            </Grid.Container>
+            <Spacer size='48px' />
+          </>
+        )}
+      </Layout.Container>
+    </>
   )
 }
 

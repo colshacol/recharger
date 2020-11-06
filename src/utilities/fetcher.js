@@ -11,7 +11,12 @@ export const get = async (query) => {
     return error
   }
 
-  return api.query(query).get().fetchError(onError).json()
+  return api
+    .query(query)
+    .options({ headers: { Accept: "application/json", "Content-Type": "application/json" } })
+    .get()
+    .fetchError(onError)
+    .json()
 }
 
 export const getAll = (dataType) => {

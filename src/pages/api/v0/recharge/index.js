@@ -1,3 +1,13 @@
+import {
+  DATABASE_ERROR,
+  AUTHENTICATION_FAILED,
+  NO_RECHARGE_API_TOKEN,
+  NO_USER_FOUND,
+} from "../../../../utilities/server/responses"
+
+import { getUser } from "../../../../utilities/server/mongo"
+import { authenticate } from "../../../../utilities/server/authenticate"
+
 import Recharge from "recharge-api-node"
 import mongojs from "mongojs"
 import jwt from "next-auth/jwt"
@@ -16,13 +26,14 @@ const getRecharge = (apiKey) => {
   })
 }
 
-const getUserRechargeKey = (emailAddress) => {
+const getRechargeToken = (emailAddress) => {
   return new Promise((resolve, reject) => {
     users.findOne({ emailAddress }, (err, doc) => {
-      err && console.log("mongo err", { err })
+      err && console.log("getRechargeToken error", { err })
       err && reject(err)
-      console.log("getUserRechargeKey", doc.rechargeApiKey)
-      return resolve(doc.rechargeApiKey)
+      !doc && console.log("getRechargeToken NO_USER")
+      doc && console.log("getRechargeToken", doc.rechargeApiKey)
+      doc ? resolve(doc.rechargeApiKey) : resolve("NO_USER")
     })
   })
 }
@@ -38,13 +49,13 @@ async function getPage([api, query = {}], index) {
   return api.list({ limit: 250, page, ...query })
 }
 
-async function count(req, res, query, recharge) {
+async function count({ req, res, query, recharge }) {
   const { dataType } = req.query
   const count = await recharge[dataType].count()
   return res.json(count)
 }
 
-async function listAll(req, res, query, recharge) {
+async function listAll({ req, res, query, recharge }) {
   const { dataType } = req.query
   console.log("LIST_ALL", { dataType })
   const count = await recharge[dataType].count()
@@ -57,7 +68,7 @@ async function listAll(req, res, query, recharge) {
   return res.json(items)
 }
 
-async function get(req, res, query, recharge) {
+async function get({ req, res, query, recharge }) {
   const { dataType, arg, ...paramsObject } = query
   const params = isEmpty(paramsObject) ? undefined : paramsObject
   console.log("GET", { dataType, arg, params })
@@ -65,7 +76,7 @@ async function get(req, res, query, recharge) {
   return res.json(data)
 }
 
-async function list(req, res, query, recharge) {
+async function list({ req, res, query, recharge }) {
   const { dataType, arg, ...params } = query
   console.log("LIST", { dataType, arg, params })
   const args = arg ? [arg, params] : [params]
@@ -73,12 +84,12 @@ async function list(req, res, query, recharge) {
   return res.json(data)
 }
 
-const replaceCode = async (req, res, query, recharge) => {
+const replaceCode = async ({ req, res, query, recharge }) => {
   const { addressId, newCode, currentCode } = query
   const existingCode = currentCode === "undefined" ? undefined : currentCode
   const needsReplaced = addressId && newCode && existingCode
   const needsAdded = addressId && newCode && !existingCode
-  console.log({ addressId, newCode, currentCode, existingCode, needsAdded, needsReplaced })
+  console.log("replaceCode", { addressId, newCode, currentCode, existingCode, needsAdded, needsReplaced })
 
   if (needsReplaced) {
     try {
@@ -115,7 +126,7 @@ const mockReq = (dataType) => {
   return { query: { dataType } }
 }
 
-const diagnostics = async (req, res, query, recharge) => {
+const diagnostics = async ({ req, res, query, recharge }) => {
   console.log("DIAGNOSTICS")
   const lister = (dataType) => listAll(mockReq(dataType), mockRes, query, recharge)
   const _subscriptions = lister("subscription")
@@ -128,30 +139,65 @@ const diagnostics = async (req, res, query, recharge) => {
   res.json({ subscriptions, customers, discounts, addresses })
 }
 
+const token = async ({ req, res, query, email, rechargeApiToken }) => {
+  if (query.action === "get") {
+    return res.json({ token: rechargeApiToken })
+  }
+
+  if (query.action === "update") {
+    return new Promise((resolve, reject) => {
+      users.findAndModify(
+        { query: { emailAddress: email }, update: { token: rechargeApiToken } },
+        (err, doc) => {
+          err && console.log("mongo err", { err })
+          err && res.status(400).json(err)
+          console.log("token save success")
+          resolve(res.json({ success: true }))
+        }
+      )
+    })
+  }
+}
+
+const newUser = async ({ req, res, query }) => {
+  return new Promise((resolve, reject) => {
+    users.save(query, (err, doc) => {
+      err && console.log("mongo err", { err })
+      err && res.status(400).json(err)
+      resolve(res.json({ success: true, method: "newUser" }))
+    })
+  })
+}
+
 const methods = {
   replaceCode,
   diagnostics,
+  newUser,
   listAll,
+  token,
   count,
   list,
   get,
 }
 
 export default async (req, res) => {
-  const email = await getEmailFromToken(req)
-  const rechargeKey = await getUserRechargeKey(email)
-  const recharge = getRecharge(rechargeKey)
-
   const { method, ...query } = req.query
-  return methods[method](req, res, query, recharge)
-}
 
-const getEmailFromToken = async (req) => {
-  if (process.env.NODE_ENV === "development") {
-    return "colshacol@gmail.com"
-  }
+  const token = await authenticate(req)
+  console.log("token", token)
+  if (!token) return res.status(400).json(AUTHENTICATION_FAILED)
 
-  const token = await jwt.getToken({ req, secret, signingKey })
-  console.log("getEmailFromToken", token.email)
-  return token.email
+  const user = await getUser(token.email)
+  if (!user || !user.rechargeApiToken) return res.status(400).json(NO_RECHARGE_API_TOKEN)
+  if (user.error === "NO_USER") return res.status(400).json(NO_USER_FOUND)
+  if (user.error) return res.status(400).json(DATABASE_ERROR)
+
+  return methods[method]({
+    recharge: getRecharge(user.rechargeApiToken),
+    rechargeApiToken: user.rechargeApiToken,
+    query,
+    email,
+    req,
+    res,
+  })
 }

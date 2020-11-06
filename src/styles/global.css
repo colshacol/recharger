@@ -8,6 +8,18 @@
 #__next > div {
   height: 100%;
 }
+
+.nav-item {
+  margin: 0 !important;
+}
+
+.dropdown-item.dropdown-input:hover {
+  background: initial;
+}
+
+.dropdown.pagination-items-per-page {
+  display: none;
+}
 /* 
 h1 {
   font-size: 32px !important;

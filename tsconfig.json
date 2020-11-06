@@ -15,8 +15,22 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "baseUrl": ".",
+
+    "paths": {
+      "#comps/*": ["./src/comps/*"],
+      "#utilities/*": ["./src/utilities/*"],
+      "#styles/*": ["./src/styles/*"],
+      "#assets/*": ["./src/assets/*"]
+    }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/utilities/fetcher.js"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "src/utilities/fetcher.js",
+    "src/comps/AddressSubscriptions.jsx"
+  ],
   "exclude": ["node_modules"]
 }

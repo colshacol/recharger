@@ -1,0 +1,20 @@
+@apiRoot = http://localhost:3000/api
+
+###
+
+GET {{apiRoot}}/v0/getCustomers HTTP/1.1
+
+###
+
+GET {{apiRoot}}/v0/getCustomerPage?id=52496263 HTTP/1.1
+
+###
+
+GET {{apiRoot}}/v0/userToken HTTP/2.0
+Content-Type: application/json
+Cookies: "next-auth.session-token=eyJhbGciOiJIUzUxMiJ9.eyJuYW1lIjoiY29sc2hhY29sIiwiZW1haWwiOiJjb2xzaGFjb2xAZ21haWwuY29tIiwicGljdHVyZSI6Imh0dHBzOi8vcy5ncmF2YXRhci5jb20vYXZhdGFyLzIxNzgzN2RiMzkxNDBkMDU2YzE0ZmMzOWIyZTI0NjM0P3M9NDgwJnI9cGcmZD1odHRwcyUzQSUyRiUyRmNkbi5hdXRoMC5jb20lMkZhdmF0YXJzJTJGY28ucG5nIiwiaWF0IjoxNjA0NTMzOTg5LCJleHAiOjE2MDcxMjU5ODl9.8_jfo6ixQjv8c6ReeyWJrciep5kpfO2JPxSkMh3k75i7oIsQGA3YfBFYRTRnlYj7FBk2oqjWG_l2xcbwRv25Yw"
+
+###
+
+GET {{apiRoot}}/v0/userRechargeToken HTTP/1.1
+

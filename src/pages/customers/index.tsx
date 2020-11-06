@@ -75,6 +75,7 @@ const Pagination = (props) => {
         activePage={props.currentPage}
         onPageChange={props.goToPage}
         totalItems={props.filteredData.length}
+        spritemap={""}
       />
     </Layout.Row>
   )
